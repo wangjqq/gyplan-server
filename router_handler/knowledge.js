@@ -61,12 +61,12 @@ exports.getDataStructureKeyTypeList = (req, res) => {
 
 // 新增数据结构/算法知识点分类
 exports.addDataStructureKeyType = (req, res) => {
-  const userinfo = req.body
+  const userinfo = req.query
   // 定义新增语句
   const sqlStr = `insert into datastructure_key_type set ?`
-
+  console.log(req);
   db.query(sqlStr, {
-    name: userinfo.name,
+    label: userinfo.name,
     father_id: userinfo.father_id
   }, (err, results) => {
     // 执行 SQL 语句失败
