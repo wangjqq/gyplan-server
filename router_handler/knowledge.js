@@ -80,3 +80,40 @@ exports.addDataStructureKeyType = (req, res) => {
     })
   })
 }
+
+// 新增数据结构/算法的题目/知识点
+exports.addDataStructure = (req, res) => {
+  const userinfo = req.query
+  // 定义新增语句
+  console.log(userinfo);
+  if (userinfo.is_knowledge_point == 1) {
+    userinfo.name = null
+    userinfo.answer = null
+    userinfo.difficulty = null
+    userinfo.state = null
+    userinfo.my_answer = null
+  }
+  const sqlStr = `insert into datastructure_info set ?`
+  db.query(sqlStr, {
+    name: userinfo.name,
+    answer: userinfo.answer,
+    state: userinfo.state,
+    difficulty: userinfo.difficulty,
+    my_answer: userinfo.my_answer,
+    is_knowledge_point: userinfo.is_knowledge_point,
+    knowledgeType: userinfo.knowledgeType,
+    note: userinfo.note,
+    key_point_name: userinfo.key_point_name,
+    key_point_content: userinfo.key_point_content,
+  }, (err, results) => {
+    // 执行 SQL 语句失败
+    if (err) {
+      return res.cc(err)
+    }
+    res.send({
+      status: 200,
+      message: '添加数据结构/算法的题目/知识点成功！',
+      data: results,
+    })
+  })
+}

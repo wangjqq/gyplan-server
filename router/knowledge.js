@@ -13,5 +13,7 @@ router.get('/knowledge/getDataStructureKeyTypeList', knowledge_handler.getDataSt
 
 // 新增数据结构/算法知识点分类
 router.post('/knowledge/addDataStructureKeyType', knowledge_handler.addDataStructureKeyType)
+// 新增数据结构/算法的题目/知识点
+router.post('/knowledge/addDataStructure', knowledge_handler.addDataStructure)
 
 module.exports = router
