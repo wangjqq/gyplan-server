@@ -32,6 +32,9 @@ app.use((req, res, next) => {
 // 导入并使用知识模块
 const knowledgeRouter = require('./router/knowledge')
 app.use('/api', knowledgeRouter)
+// 导入并使用通用模块
+const commonRouter = require('./router/common')
+app.use('/api', commonRouter)
 
 // 定义错误级别的中间件
 app.use((err, req, res, next) => {

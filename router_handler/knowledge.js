@@ -94,7 +94,7 @@ exports.addDataStructure = (req, res) => {
     userinfo.my_answer = null
     userinfo.description = null
   }
-  if (userinfo.id != "") {
+  if (userinfo.id != "") { //是修改数据
     const sqlStr = `UPDATE datastructure_info set ? WHERE id =` + userinfo.id;
     db.query(sqlStr, {
       name: userinfo.name,
