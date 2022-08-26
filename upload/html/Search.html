@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Search</title>
+    <meta charset="utf-8">
+    <script language="javascript" type="text/javascript" src="js/Ajax.js"></script>
+    <script language="javascript" type="text/javascript" src="js/public.js"></script>
+</head>
+
+<body style="margin: 0;padding: 0;background: url(images/Search/background.png) no-repeat;width: 1280px;height: 720px;"
+    id="body">
+    <div id="list-class" style="color: black"></div>
+    <div id="nowElement"
+        style="position: absolute;left: 211px;top: 57.5px;background: url(images/Search/k0.png) no-repeat;"></div>
+    <p style="height: 50px;line-height: 50px;width: 150px;text-align: center;font-size: 30px;color: black;position: absolute;left: 810px;top: 595px;margin: 0;display: none;"
+        id="page-pages">
+        <span id="page"></span>
+        <span>/</span>
+        <span id="pages"></span>
+    </p>
+    <div id="input"
+        style="height: 70px;width: 420px;position: absolute;left: 79px;top: 175px;line-height: 70px;text-align: center;font-size: 45px;font-weight: bold;">
+    </div>
+    <div id="tishi"
+        style="height: 100px;width: 800px;font-size: 40px;position: absolute;font-weight: bold;color: red;word-wrap: break-word;">
+    </div>
+    <!-- <div id="text" style="height: 200px;width: 200px;background-color: pink;position: absolute;left: 100px;top:100px;color:black;"></div> -->
+    <script type="text/javascript">
+        // var box = document.getElementById("text");
+        var nowElement = 0;
+        var page = 1;
+        var nav = 0;
+        var player = 0;
+        var pageid = 'Search';
+        var pages = 1;
+        var divs;
+        var divss;
+        var spans;
+        var input = '';
+        var inputArr = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+        // var url = 'http://10.215.1.60:8081/slcms/history/getHistory?appcode=sl1005&cardno=' + getAccount();
+        var data;
+        var position = [{
+            x: '57',
+            y: '287',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '132',
+            y: '287',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '208',
+            y: '287',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '282',
+            y: '287',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '358',
+            y: '287',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '434',
+            y: '287',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '57',
+            y: '355',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '132',
+            y: '355',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '208',
+            y: '355',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '282',
+            y: '355',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '358',
+            y: '355',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '434',
+            y: '355',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '57',
+            y: '423',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '132',
+            y: '423',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '208',
+            y: '423',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '282',
+            y: '423',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '358',
+            y: '423',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '434',
+            y: '423',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '57',
+            y: '492',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '132',
+            y: '492',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '208',
+            y: '492',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '282',
+            y: '492',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '358',
+            y: '492',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '434',
+            y: '492',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '57',
+            y: '560',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '132',
+            y: '560',
+            url: 'images/Search/focus.png',
+            w: '93',
+            h: '88'
+        }, {
+            x: '207',
+            y: '560',
+            url: 'images/Search/delete.png',
+            w: '169',
+            h: '88'
+        }, {
+            x: '358',
+            y: '560',
+            url: 'images/Search/delete.png',
+            w: '169',
+            h: '88'
+        }, {
+            x: '587',
+            y: '112',
+            url: 'images/Search/k.png',
+            w: '604',
+            h: '90'
+        }, {
+            x: '587',
+            y: '170',
+            url: 'images/Search/k.png',
+            w: '604',
+            h: '90'
+        }, {
+            x: '587',
+            y: '226',
+            url: 'images/Search/k.png',
+            w: '604',
+            h: '90'
+        }, {
+            x: '587',
+            y: '283',
+            url: 'images/Search/k.png',
+            w: '604',
+            h: '90'
+        }, {
+            x: '587',
+            y: '339',
+            url: 'images/Search/k.png',
+            w: '604',
+            h: '90'
+        }, {
+            x: '587',
+            y: '395',
+            url: 'images/Search/k.png',
+            w: '604',
+            h: '90'
+        }, {
+            x: '587',
+            y: '454',
+            url: 'images/Search/k.png',
+            w: '604',
+            h: '90'
+        }, {
+            x: '587',
+            y: '510',
+            url: 'images/Search/k.png',
+            w: '604',
+            h: '90'
+        }, {
+            x: '649',
+            y: '587',
+            url: 'images/Search/next.png',
+            w: '161',
+            h: '63'
+        }, {
+            x: '970',
+            y: '587',
+            url: 'images/Search/next.png',
+            w: '161',
+            h: '63'
+        },];
+
+        function Block() {
+            document.getElementById('nowElement').style.backgroundImage = "url(" + position[nowElement].url + ")";
+            document.getElementById('nowElement').style.left = position[nowElement].x + 'px';
+            document.getElementById('nowElement').style.top = position[nowElement].y + 'px';
+            document.getElementById('nowElement').style.width = position[nowElement].w + 'px';
+            document.getElementById('nowElement').style.height = position[nowElement].h + 'px';
+            divs = document.getElementById('list-class');
+            divss = divs.getElementsByTagName('img');
+            spans = divs.getElementsByTagName('div');
+            if (nowElement > 27 && nowElement < 36) {
+                spans[nowElement - 28].style.fontSize = '27px';
+                spans[nowElement - 28].style.fontWeight = 'bold';
+            }
+        }
+
+        function showHtml() {
+            if (data == null) {
+                pages = '';
+                page = '';
+            } else if (data.length <= 8) {
+                pages = 1;
+            } else if (data.length % 8 == 0) {
+                pages = data.length / 8;
+            } else {
+                pages = parseInt(data.length / 8) + 1;
+            }
+            if (page > pages) {
+                page = pages;
+            }
+            document.getElementById('page').innerHTML = page;
+            document.getElementById('pages').innerHTML = pages;
+        }
+
+        function createHtml() {
+            document.getElementById('list-class').innerHTML = '';
+            var count;
+            if (data.length > page * 8) {
+                count = 8;
+            } else {
+                count = data.length - (page - 1) * 8;
+            }
+            for (var i = 0; i < count; i++) {
+                var imgs = document.createElement('img');
+                imgs.src = 'images/Search/k0.png';
+                imgs.style.position = 'absolute';
+                imgs.style.left = 610 + 'px';
+                imgs.style.top = 130 + i * 57 + 'px';
+                imgs.style.display = 'block';
+                var divs = document.createElement('div');
+                divs.innerHTML = data[i + ((page - 1) * 8)].coursename;
+                divs.style.fontSize = '25px';
+                divs.style.width = '558px';
+                divs.style.height = '52px';
+                divs.style.lineHeight = '52px';
+                divs.style.textAlign = 'center';
+                divs.style.color = 'black';
+                divs.style.position = 'absolute';
+                divs.style.zIndex = 1000;
+                divs.style.left = 610 + 'px';
+                divs.style.top = 130 + i * 57 + 'px';
+                divs.style.fontFamily = '黑体';
+                document.getElementById('list-class').appendChild(imgs);
+                document.getElementById('list-class').appendChild(divs);
+            }
+            Block();
+        }
+        if (data != null) {
+            showHtml();
+            createHtml();
+        } else {
+            Block();
+        }
+        document.onkeydown = Move;
+
+        var kl = ""
+        function Move() {
+            var keyvalue = event.keyCode ? event.keyCode : event.which;
+            switch (keyvalue) {
+                case 37:
+                case 3:
+                    FunLeft();
+                    kl += 'a'
+                    break;
+                case 38:
+                case 1:
+                    FunUp();
+                    kl += 'w'
+                    break;
+                case 39:
+                case 4:
+                    FunRight();
+                    kl += 'd'
+                    break;
+                case 40:
+                case 2:
+                    FunDown();
+                    kl += 's'
+                    break;
+                case 13:
+                case 4097:
+                    FunEnter();
+                    break;
+                case 8:
+                case 340:
+                case 339:
+                case 27:
+                    if (event.returnValue) {
+                        event.returnValue = false;
+                    }
+                    if (event.preventDefault) {
+                        event.preventDefault();
+                    }
+                    FunBack();
+                    break;
+                case 339:
+                case 27:
+                    FunBack();
+                    break;
+                case 597:
+                case 4108:
+                    doMute();
+                    break;
+            }
+
+            if (kl.substring(kl.length - 8) == "wwssaadd") {
+                // window.location.href = "http://112.45.114.91:8081/CCJS/Indextest.html";
+                // window.location.href = "http://112.45.114.91:8081/SLMSYX/mainTest.html";
+                // window.location.href = "http://112.45.114.91:8081/SLMSYX/category/huodong/coujiang.html";
+                window.location.href = "http://112.45.114.91:8081/SLMSYX/category/primary/primarychinessTest.html";
+                // window.location.href="http://112.45.114.91:8081/SLMSYX/luckdrawTest.html";
+                // window.location.href = "http://112.45.114.91:8081/SLMSYX/category/huodong/luckdrawTest.html";
+            }
+            if (kl.substring(kl.length - 8) == "wsad") {
+                // window.location.href = "http://112.45.114.91:8081/CCJS/Indextest.html";
+                window.location.href = "http://112.45.114.91:8081/SLMSYX/indexTest.html";
+                // window.location.href="http://112.45.114.91:8081/SLMSYX/luckdrawTest.html";
+                // window.location.href = "http://112.45.114.91:8081/SLMSYX/category/huodong/coujiang.html";
+                // window.location.href = "http://112.45.114.91:8081/SLMSYX/category/huodong/luckdrawTest.html";
+                // window.location.href = "http://112.45.114.91:8081/SLMSYX/category/dinosaur/dinosaurrecommend.html";
+            }
+            if (kl.substring(kl.length - 8) == "wwwsssaa") {
+                // window.location.href = "http://112.45.114.91:8081/CCJS/Indextest.html";
+                // window.location.href="http://112.45.114.91:8081/SLMSYX/mainTest.html";
+                // window.location.href="http://112.45.114.91:8081/SLMSYX/luckdrawTest.html";
+                window.location.href = "http://112.45.114.91:8081/SLMSYX/category/primary/primarymathTest.html";
+                // window.location.href = "http://112.45.114.91:8081/SLMSYX/category/huodong/coujiang.html";
+                // window.location.href = "http://112.45.114.91:8081/SLMSYX/category/huodong/luckdrawTest.html";
+                // window.location.href = "http://112.45.114.91:8081/SLMSYX/category/dinosaur/dinosaurrecommend.html";
+            }
+            // console.log(nowElement);
+
+            Block();
+        }
+
+        function FunLeft() {
+            if (nowElement < 28 && nowElement > 0) {
+                nowElement -= 1;
+            } else if (nowElement > 27 && nowElement < 36) {
+                spans[nowElement - 28].style.fontSize = '25px';
+                spans[nowElement - 28].style.fontWeight = 'normal';
+                nowElement = 5;
+            } else {
+                switch (nowElement) {
+                    case 36:
+                        nowElement = 5;
+                        break;
+                    case 37:
+                        nowElement -= 1;
+                        break;
+                }
+            }
+        }
+
+        function FunRight() {
+            if (nowElement < 5) {
+                nowElement += 1;
+            } else if (nowElement > 5 && nowElement < 11) {
+                nowElement += 1;
+            } else if (nowElement > 11 && nowElement < 17) {
+                nowElement += 1;
+            } else if (nowElement > 17 && nowElement < 23) {
+                nowElement += 1;
+            } else if (nowElement > 23 && nowElement < 27) {
+                nowElement += 1;
+            } else {
+                switch (nowElement) {
+                    case 5:
+                    case 11:
+                    case 17:
+                    case 23:
+                    case 27:
+                        nowElement = 28;
+                        if (data == null) {
+                            nowElement = 36;
+                        }
+                        break;
+                    case 36:
+                        nowElement += 1;
+                        break;
+                }
+            }
+        }
+
+        function FunUp() {
+            if (nowElement > 5 && nowElement < 27) {
+                nowElement -= 6;
+            } else if (nowElement > 28 && nowElement < 36) {
+                spans[nowElement - 28].style.fontSize = '25px';
+                spans[nowElement - 28].style.fontWeight = 'normal';
+                nowElement -= 1;
+            } else {
+                switch (nowElement) {
+                    case 27:
+                        nowElement = 22;
+                        break;
+                    case 36:
+                    case 37:
+                        if (data != null) {
+                            nowElement = 35;
+                            if (nowElement >= data.length - ((page - 1) * 8) + 28) {
+                                nowElement = data.length - ((page - 1) * 8) + 27;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+
+        function FunDown() {
+            if (nowElement < 21) {
+                nowElement += 6;
+            } else if (nowElement > 27 && nowElement < 36) {
+                spans[nowElement - 28].style.fontSize = '25px';
+                spans[nowElement - 28].style.fontWeight = 'normal';
+                nowElement += 1;
+                if (nowElement >= (data.length - (page - 1) * 8) + 28) {
+                    nowElement = 36;
+                }
+            } else {
+                switch (nowElement) {
+                    case 21:
+                        nowElement = 26;
+                        break;
+                    case 22:
+                    case 23:
+                        nowElement = 27;
+                        break;
+                }
+            }
+        }
+
+
+        function auth2() {
+
+            var tsname = data[item].coursecode; //节目名字
+            var videoname = data[item].coursename; //视频名字
+            var isfree = ''; //权限 是否免费
+            var topic = data[item].topicode;
+            // var part = data[item].course.part;
+            // var sort = data[item].course.sort;;
+            var appCode = data[item].appcode; //产品编码
+            var Btn = nowElement + (page - 1) * 9 - 38;
+            // var singleOrSerials = data[item].course.showtype;
+            var videoType = 'ts';
+            var proid = data[item].proid;
+            var rowData = objToString({
+                tsName: tsname,
+                part: 1,
+                sort: 1,
+                singleOrSerials: 1,
+                topiCode: topic,
+                pageId: pageid
+            });
+            console.log('rowData:' + rowData);
+            toAuth("hWUrl", rowData, '2998780', window.location.href);
+        }
+        function FunEnter() {
+            if (nowElement > 27 && nowElement < 36) { //搜索列表
+                item = (page - 1) * 8 + nowElement - 28;
+                //window.location.href = 'Index.html';
+                auth2();
+                // window.location.href = authenticationSearch('Search', nowElement);
+            } else if (nowElement < 26) {
+                if (input.length < 10) {
+                    input += inputArr[nowElement];
+                }
+                document.getElementById('input').innerHTML = input;
+            } else {
+                switch (nowElement) {
+                    case 36: //上一页
+                        if (page > 1) {
+                            page -= 1;
+                            createHtml();
+                            showHtml();
+                        }
+                        break;
+                    case 37: //下一页
+                        if (page < pages) {
+                            page += 1;
+                            createHtml();
+                            showHtml();
+                        }
+                        break;
+                    case 26: //删除
+                        input = input.substring(0, input.length - 1);
+                        document.getElementById('input').innerHTML = input;
+                        break;
+                    case 27: //搜索
+                        var url = '/slcms/course/getCourseBySpell?appcode=sl1005&content=' + input;
+                        data = funCallService('POST', false, url, '', '');
+                        if (JSON.parse(data) == undefined || JSON.parse(data) == 'undefined') {
+                            data = eval('(' + data + ')');
+                        } else {
+                            data = JSON.parse(data);
+                        }
+                        data = data.rowData;
+                        if (data != null) {
+                            document.getElementById('page-pages').style.display = 'block';
+                            createHtml();
+                            showHtml();
+                        } else {
+                            document.getElementById('page-pages').style.display = 'none';
+                            document.getElementById('list-class').innerHTML = '';
+                            page = 1;
+                            pages = 1;
+                        }
+                        break;
+                }
+            }
+        }
+
+        function FunBack() {
+            // window.location.href = 'Index.html';
+            window.location.href = 'Index.html?nowElement=' + getQueryString('nowElement');
+        }
+
+
+        try {
+            logs();
+        } catch (e) { }
+    </script>
+</body>
+
+</html>

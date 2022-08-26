@@ -1,7 +1,7 @@
 // 导入 express
 const express = require('express')
 const https = require('https')
-
+const multer = require('multer')
 // 创建服务器的实例对象
 const app = express()
 
@@ -20,7 +20,7 @@ app.use(express.urlencoded({
 app.use((req, res, next) => {
   // status 默认值为 1，表示失败的情况
   // err 的值，可能是一个错误对象，也可能是一个错误的描述字符串
-  res.cc = function (err, status = 1) {
+  res.cc = function (err, status = 500) {
     res.send({
       status,
       message: err instanceof Error ? err.message : err,
@@ -29,12 +29,20 @@ app.use((req, res, next) => {
   next()
 })
 
+var objMulter = multer({
+  dest: './upload/'
+})
+app.use(objMulter.any())
+
 // 导入并使用知识模块
 const knowledgeRouter = require('./router/knowledge')
 app.use('/api', knowledgeRouter)
 // 导入并使用通用模块
 const commonRouter = require('./router/common')
 app.use('/api', commonRouter)
+// 导入并使用元器件管理模块
+const imsRouter = require('./router/ims')
+app.use('/api', imsRouter)
 
 // 定义错误级别的中间件
 app.use((err, req, res, next) => {
