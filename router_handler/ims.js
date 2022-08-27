@@ -80,6 +80,7 @@ exports.addItem = (req, res) => {
     price: userinfo.price,
     smt: userinfo.smt,
     size: userinfo.size,
+    place: userinfo.place
   }, (err, results) => {
     // 执行 SQL 语句失败
     if (err) {
