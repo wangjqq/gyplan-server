@@ -21,7 +21,7 @@ app.use(session({
 // 导入并配置 cors 中间件
 const cors = require('cors')
 app.use(cors({
-  origin: 'http://localhost:8080/',
+  // origin: 'http://localhost:8080/',
   credentials: true
 }))
 const options = {
