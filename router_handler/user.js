@@ -8,7 +8,7 @@ exports.regUser = (req, res) => {
     // 获取客户端提交到服务器的用户信息
     const userinfo = req.body
 
-    console.log(req.sessionID)
+    // console.log(req.sessionID)
     // console.log(userinfo);
     // 对表单中的数据,进行合法性的校验
     // if (!userinfo.username || !userinfo.password) {
@@ -83,7 +83,7 @@ exports.login = (req, res) => {
     // 接受表单的数据
     const userinfo = req.body
     // 定义SQL数据
-    console.log(req.body, req.session)
+    // console.log(req.body, req.session)
     if (userinfo.captcha != req.session.capdata) {
 
         return res.cc('验证码错误')
@@ -111,7 +111,6 @@ exports.login = (req, res) => {
             username: userinfo.username,
             login: 1,
         }; // session 存储验证码数值
-        req.session
         res.cc('登陆成功', 200)
     })
 
@@ -123,8 +122,8 @@ exports.captcha = (req, res) => {
     var captcha = svgCaptcha.create();
     req.session.capdata = captcha.text.toLowerCase(); // session 存储验证码数值
     // req.session.save()
-    console.log(req.session)
-    console.log(req.sessionID)
+    // console.log(req.session)
+    // console.log(req.sessionID)
 
     // if (null == req.session[sessionConstant.login]) {
 
