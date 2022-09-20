@@ -3,12 +3,27 @@ const express = require('express')
 const https = require('https')
 const multer = require('multer')
 const joi = require('joi')
-// 创建服务器的实例对象
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
 const app = express()
+app.use(cookieParser('secret'));
+app.use(session({
+  secret: 'secret', // 对session id 相关的cookie 进行签名
+  resave: true,
+  saveUninitialized: true, // 是否保存未初始化的会话
+  cookie: {
+    maxAge: 1000 * 60 * 3, // 设置 session 的有效时间，单位毫秒
+  },
+}));
+// 创建服务器的实例对象
+
 
 // 导入并配置 cors 中间件
 const cors = require('cors')
-app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:8080/',
+  credentials: true
+}))
 const options = {
   rejectUnauthorized: false
 }
@@ -34,14 +49,7 @@ var objMulter = multer({
   dest: './upload/'
 })
 app.use(objMulter.any())
-// app.use(session({
-//   secret: 'secret', // 对session id 相关的cookie 进行签名
-//   resave: true,
-//   saveUninitialized: false, // 是否保存未初始化的会话
-//   cookie: {
-//     maxAge: 1000 * 60 * 3, // 设置 session 的有效时间，单位毫秒
-//   },
-// }));
+
 // 导入并使用知识模块
 const knowledgeRouter = require('./router/knowledge')
 app.use('/api', knowledgeRouter)

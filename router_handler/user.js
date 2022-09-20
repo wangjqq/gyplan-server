@@ -4,10 +4,11 @@ const db = require('../db/index')
 const bcrypt = require('bcryptjs')
 // 注册新用户的处理函数
 exports.regUser = (req, res) => {
+    console.log(req.session)
     // 获取客户端提交到服务器的用户信息
     const userinfo = req.body
 
-    // console.log(userinfo)
+    console.log(req.sessionID)
     // console.log(userinfo);
     // 对表单中的数据,进行合法性的校验
     // if (!userinfo.username || !userinfo.password) {
@@ -110,13 +111,22 @@ exports.login = (req, res) => {
 exports.captcha = (req, res) => {
     var svgCaptcha = require('svg-captcha');
     var captcha = svgCaptcha.create();
+    req.session.capdata = captcha.text.toLowerCase(); // session 存储验证码数值
+    // req.session.save()
     console.log(req.session)
-    if (null == req.session[sessionConstant.login]) {
+    console.log(req.sessionID)
 
-        req.session[sessionConstant.login] = {};
+    // if (null == req.session[sessionConstant.login]) {
 
-    }
+    //     req.session[sessionConstant.login] = {};
+
+    // }
     // req.session.captcha = captcha.text;
+
+    res.setHeader("Access-Control-Expose-Headers", "session_key");
+    res.setHeader(" Access-Control-Allow-Credentials", true);
+    res.setHeader(" Access-Control-Allow-Origin", 'http://localhost:8080/');
+    res.setHeader('session_key', '123')
     res.type('svg');
     res.status(200).send(captcha.data);
 }
