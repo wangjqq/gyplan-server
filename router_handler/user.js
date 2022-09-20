@@ -83,6 +83,11 @@ exports.login = (req, res) => {
     // 接受表单的数据
     const userinfo = req.body
     // 定义SQL数据
+    console.log(req.body, req.session.capdata)
+    if (userinfo.captcha != req.session.capdata) {
+
+        return res.cc('验证码错误')
+    }
     const sql = 'select * from ev_users where username=?'
     // 执行SQL语句
     db.query(sql, userinfo.username, (err, results) => {
