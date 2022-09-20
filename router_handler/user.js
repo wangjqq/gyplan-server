@@ -71,7 +71,10 @@ exports.regUser = (req, res) => {
             // 注册用户成功
             // res.send({ status: 0, message: '注册成功' })
             // console.log(userinfo);
-            res.cc('注册成功!', 200)
+            res.send({
+                status: 200,
+                message: '注册成功！',
+            })
         })
 
     })
@@ -111,8 +114,11 @@ exports.login = (req, res) => {
             username: userinfo.username,
             login: 1,
         }; // session 存储验证码数值
-        console.log(req.session)
-        res.cc('登陆成功', 200)
+
+        res.send({
+            status: 200,
+            message: '登录成功！',
+        })
     })
 
 

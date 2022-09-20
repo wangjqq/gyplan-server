@@ -18,7 +18,7 @@ app.use(session({
   resave: true,
   saveUninitialized: true, // 是否保存未初始化的会话
   cookie: {
-    maxAge: 1000 * 60 * 3, // 设置 session 的有效时间，单位毫秒
+    maxAge: 1000 * 60 * 60 * 12, // 设置 session 的有效时间，单位毫秒,12小时
   },
 }));
 // 创建服务器的实例对象
@@ -35,7 +35,8 @@ app.use(express.urlencoded({
 
 // 一定要在路由之前，封装 res.cc 函数
 app.use((req, res, next) => {
-  // status 默认值为 1，表示失败的情况
+  console.log(req.session)
+  // status 默认值为 500，表示失败的情况
   // err 的值，可能是一个错误对象，也可能是一个错误的描述字符串
   res.cc = function (err, status = 500) {
     res.send({
