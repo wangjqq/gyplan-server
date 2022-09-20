@@ -107,7 +107,7 @@ exports.login = (req, res) => {
         if (!compareResult) {
             return res.cc('登陆失败!')
         }
-        res.send('登陆成功', 200)
+        res.cc('登陆成功', 200)
     })
 
 
