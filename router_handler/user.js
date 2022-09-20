@@ -111,6 +111,7 @@ exports.login = (req, res) => {
             username: userinfo.username,
             login: 1,
         }; // session 存储验证码数值
+        console.log(req.session)
         res.cc('登陆成功', 200)
     })
 
