@@ -2,6 +2,7 @@
 const express = require('express')
 const https = require('https')
 const multer = require('multer')
+const joi = require('joi')
 // 创建服务器的实例对象
 const app = express()
 
@@ -33,7 +34,14 @@ var objMulter = multer({
   dest: './upload/'
 })
 app.use(objMulter.any())
-
+// app.use(session({
+//   secret: 'secret', // 对session id 相关的cookie 进行签名
+//   resave: true,
+//   saveUninitialized: false, // 是否保存未初始化的会话
+//   cookie: {
+//     maxAge: 1000 * 60 * 3, // 设置 session 的有效时间，单位毫秒
+//   },
+// }));
 // 导入并使用知识模块
 const knowledgeRouter = require('./router/knowledge')
 app.use('/api', knowledgeRouter)
@@ -43,9 +51,16 @@ app.use('/api', commonRouter)
 // 导入并使用元器件管理模块
 const imsRouter = require('./router/ims')
 app.use('/api', imsRouter)
+// 导入并使用用户路由模块
+const userRouter = require('./router/user')
+app.use(userRouter)
 
 // 定义错误级别的中间件
 app.use((err, req, res, next) => {
+  // 验证失败导致的错误
+  if (err instanceof joi.ValidationError) {
+    return res.cc(err)
+  }
   // 未知的错误
   res.cc(err)
 })
