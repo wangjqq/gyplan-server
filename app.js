@@ -6,6 +6,12 @@ const joi = require('joi')
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 const app = express()
+// 导入并配置 cors 中间件
+const cors = require('cors')
+app.use(cors({
+  origin: 'http://119.91.65.198:8080',
+  credentials: true
+}))
 app.use(cookieParser('secret'));
 app.use(session({
   secret: 'secret', // 对session id 相关的cookie 进行签名
@@ -18,12 +24,7 @@ app.use(session({
 // 创建服务器的实例对象
 
 
-// 导入并配置 cors 中间件
-const cors = require('cors')
-app.use(cors({
-  // origin: 'http://localhost:8080/',
-  // credentials: true
-}))
+
 const options = {
   rejectUnauthorized: false
 }
