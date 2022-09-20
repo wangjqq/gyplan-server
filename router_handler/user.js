@@ -124,8 +124,8 @@ exports.captcha = (req, res) => {
     // req.session.captcha = captcha.text;
 
     res.setHeader("Access-Control-Expose-Headers", "session_key");
-    res.setHeader(" Access-Control-Allow-Credentials", true);
-    res.setHeader(" Access-Control-Allow-Origin", 'http://localhost:8080/');
+    // res.setHeader(" Access-Control-Allow-Credentials", true);
+    // res.setHeader(" Access-Control-Allow-Origin", 'http://localhost:8080/');
     res.setHeader('session_key', '123')
     res.type('svg');
     res.status(200).send(captcha.data);
