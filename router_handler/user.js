@@ -121,7 +121,7 @@ exports.captcha = (req, res) => {
     //     req.session[sessionConstant.login] = {};
 
     // }
-    // req.session.captcha = captcha.text;
+    req.session.captcha = captcha.text;
 
     res.setHeader("Access-Control-Expose-Headers", "session_key");
     // res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
