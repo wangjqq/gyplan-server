@@ -71,7 +71,7 @@ exports.regUser = (req, res) => {
             // 注册用户成功
             // res.send({ status: 0, message: '注册成功' })
             // console.log(userinfo);
-            res.cc('注册成功!', 0)
+            res.cc('注册成功!', 200)
         })
 
     })
@@ -107,7 +107,7 @@ exports.login = (req, res) => {
         if (!compareResult) {
             return res.cc('登陆失败!')
         }
-        res.send('登陆成功')
+        res.send('登陆成功', 200)
     })
 
 
