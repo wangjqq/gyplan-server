@@ -88,7 +88,6 @@ exports.login = (req, res) => {
     // 定义SQL数据
     // console.log(req.body, req.session)
     if (userinfo.captcha != req.session.capdata) {
-
         return res.cc('验证码错误')
     }
     const sql = 'select * from ev_users where username=?'
@@ -137,7 +136,6 @@ exports.captcha = (req, res) => {
     //     req.session[sessionConstant.login] = {};
 
     // }
-    req.session.captcha = captcha.text;
 
     res.setHeader("Access-Control-Expose-Headers", "session_key");
     // res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
