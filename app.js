@@ -22,7 +22,7 @@ app.use(session({
 const cors = require('cors')
 app.use(cors({
   // origin: 'http://localhost:8080/',
-  credentials: true
+  // credentials: true
 }))
 const options = {
   rejectUnauthorized: false
