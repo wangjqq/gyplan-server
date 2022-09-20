@@ -84,31 +84,31 @@ exports.login = (req, res) => {
     const userinfo = req.body
     // 定义SQL数据
     console.log(req.body, req.session.capdata)
-    if (userinfo.captcha != req.session.capdata) {
+    // if (userinfo.captcha != req.session.capdata) {
 
-        return res.cc('验证码错误')
-    }
-    const sql = 'select * from ev_users where username=?'
-    // 执行SQL语句
-    db.query(sql, userinfo.username, (err, results) => {
-        // 执行SQL语句失败
-        if (err) {
-            return res.cc(err)
-        }
-        // 执行SQL语句成功,但是获取到的数据条数不等于1
-        if (results.length !== 1) {
-            return res.cc('登陆失败')
-        }
-        // TODO:判断密码是否正确
-        // console.log(userinfo.password);
-        // console.log(results[0].password);
-        const compareResult = bcrypt.compareSync(userinfo.password, results[0].password)
-        // console.log(compareResult);
-        if (!compareResult) {
-            return res.cc('登陆失败!')
-        }
-        res.send('登陆成功')
-    })
+    //     return res.cc('验证码错误')
+    // }
+    // const sql = 'select * from ev_users where username=?'
+    // // 执行SQL语句
+    // db.query(sql, userinfo.username, (err, results) => {
+    //     // 执行SQL语句失败
+    //     if (err) {
+    //         return res.cc(err)
+    //     }
+    //     // 执行SQL语句成功,但是获取到的数据条数不等于1
+    //     if (results.length !== 1) {
+    //         return res.cc('登陆失败')
+    //     }
+    //     // TODO:判断密码是否正确
+    //     // console.log(userinfo.password);
+    //     // console.log(results[0].password);
+    //     const compareResult = bcrypt.compareSync(userinfo.password, results[0].password)
+    //     // console.log(compareResult);
+    //     if (!compareResult) {
+    //         return res.cc('登陆失败!')
+    //     }
+    //     res.send('登陆成功')
+    // })
 
 
 }
