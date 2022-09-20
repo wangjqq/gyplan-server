@@ -107,6 +107,11 @@ exports.login = (req, res) => {
         if (!compareResult) {
             return res.cc('登陆失败!')
         }
+        req.session.user = {
+            username: userinfo.username,
+            login: 1,
+        }; // session 存储验证码数值
+        req.session
         res.cc('登陆成功', 200)
     })
 
