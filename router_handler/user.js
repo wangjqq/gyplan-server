@@ -127,22 +127,8 @@ exports.captcha = (req, res) => {
     var svgCaptcha = require('svg-captcha');
     var captcha = svgCaptcha.create();
     req.session.capdata = captcha.text.toLowerCase(); // session 存储验证码数值
-    // req.session.save()
-    // console.log(req.session)
-    // console.log(req.sessionID)
-
-    // if (null == req.session[sessionConstant.login]) {
-
-    //     req.session[sessionConstant.login] = {};
-
-    // }
-
-    res.setHeader("Access-Control-Expose-Headers", "session_key");
-    // res.setHeader("Access-Control-Expose-Headers", "Set-Cookie");
-    res.setHeader('session_key', '123')
     // res.setHeader(" Access-Control-Allow-Credentials", true);
     // res.setHeader(" Access-Control-Allow-Origin", 'http://localhost:8080/');
-
     res.type('svg');
     res.status(200).send(captcha.data);
 }
