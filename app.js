@@ -6,10 +6,13 @@ const joi = require('joi')
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 const app = express()
+const compression = require('compression')
+app.use(compression()) // 在其他中间件使用之前调用
 // 导入并配置 cors 中间件
 const cors = require('cors')
 app.use(cors({
   origin: 'http://119.91.65.198:8080',
+  // origin: 'http://127.0.0.1:8080',
   credentials: true
 }))
 app.use(cookieParser('secret'));

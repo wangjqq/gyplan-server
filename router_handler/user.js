@@ -124,6 +124,7 @@ exports.login = (req, res) => {
 }
 //发送验证码的处理函数
 exports.captcha = (req, res) => {
+    console.log(req.sessionID)
     var svgCaptcha = require('svg-captcha');
     var captcha = svgCaptcha.create();
     req.session.capdata = captcha.text.toLowerCase(); // session 存储验证码数值
