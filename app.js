@@ -11,8 +11,8 @@ app.use(compression()) // 在其他中间件使用之前调用
 // 导入并配置 cors 中间件
 const cors = require('cors')
 app.use(cors({
-  origin: 'http://119.91.65.198:8080',
-  // origin: 'http://127.0.0.1:8080',
+  // origin: 'http://119.91.65.198:8080',
+  origin: 'http://localhost:8080',
   credentials: true
 }))
 app.use(cookieParser('secret'));
@@ -22,6 +22,7 @@ app.use(session({
   saveUninitialized: true, // 是否保存未初始化的会话
   cookie: {
     maxAge: 1000 * 60 * 60 * 12, // 设置 session 的有效时间，单位毫秒,12小时
+    // maxAge: 1000 * 30, // 设置 session 的有效时间，单位毫秒,30秒
   },
 }));
 // 创建服务器的实例对象
@@ -38,7 +39,24 @@ app.use(express.urlencoded({
 
 // 一定要在路由之前，封装 res.cc 函数
 app.use((req, res, next) => {
-  console.log(req.session)
+  if (req.originalUrl.split('/')[1] != 'user') {
+    if (req.session.user != undefined) {
+      if (req.session.user.login != 1) {
+        res.send({
+          status: 201,
+          message: "登录过期,请重新登录",
+        })
+        return
+      }
+    } else {
+      res.send({
+        status: 202,
+        message: "请登录",
+      })
+      return
+    }
+  }
+
   // status 默认值为 500，表示失败的情况
   // err 的值，可能是一个错误对象，也可能是一个错误的描述字符串
   res.cc = function (err, status = 500) {

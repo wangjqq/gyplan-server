@@ -4,7 +4,7 @@ const db = require('../db/index')
 const bcrypt = require('bcryptjs')
 // 注册新用户的处理函数
 exports.regUser = (req, res) => {
-    console.log(req.session)
+    // console.log(req.session)
     // 获取客户端提交到服务器的用户信息
     const userinfo = req.body
 
@@ -20,7 +20,7 @@ exports.regUser = (req, res) => {
 
 
     // 定义SQL语句,查询用户名是否被占用
-    const sqlStr = 'select * from ev_users where username=?'
+    const sqlStr = 'select * from users_info where username=?'
     db.query(sqlStr, userinfo.username, (err, results) => {
         // 执行SQL语句失败
         if (err) {
@@ -44,7 +44,7 @@ exports.regUser = (req, res) => {
 
         userinfo.password = bcrypt.hashSync(userinfo.password, 10)
         // 定义插入新用户的SQL语句
-        const sql = 'insert into ev_users set ?'
+        const sql = 'insert into users_info set ?'
         // 调用db.squery()执行SQL语句
         db.query(sql, {
             username: userinfo.username,
@@ -85,12 +85,12 @@ exports.regUser = (req, res) => {
 exports.login = (req, res) => {
     // 接受表单的数据
     const userinfo = req.body
+    //  验证验证码
+    // if (userinfo.captcha != req.session.capdata) {
+    //     return res.cc('验证码错误')
+    // }
     // 定义SQL数据
-    // console.log(req.body, req.session)
-    if (userinfo.captcha != req.session.capdata) {
-        return res.cc('验证码错误')
-    }
-    const sql = 'select * from ev_users where username=?'
+    const sql = 'select * from users_info where username=?'
     // 执行SQL语句
     db.query(sql, userinfo.username, (err, results) => {
         // 执行SQL语句失败
@@ -109,11 +109,43 @@ exports.login = (req, res) => {
         if (!compareResult) {
             return res.cc('登陆失败!')
         }
+        // 登陆成功
+        var myDate = new Date();
+        var id = results[0].id
+        var name = results[0].username
+        const sql1 = 'select * from user_session where userId=?'
+        db.query(sql1, results[0].id, (err, results) => {
+
+            if (results.length == 1) {
+                var loginNum1 = results[0].loginNum
+                const sql2 = `UPDATE user_session set ? WHERE userId=` + id
+                console.log(sql2)
+                // (isLogin, loginTime, dueTime, loginNum) values ("1", '${myDate.toLocaleString()}', '${myDate.toLocaleString()}', '${results[0]+1}')
+                db.query(sql2, {
+                    isLogin: '1',
+                    loginTime: myDate.toLocaleString(),
+                    dueTime: myDate.toLocaleString(),
+                    loginNum: loginNum1 + 1
+                }, (err, results) => {})
+            } else {
+                console.log(111)
+                const sql2 = `insert into user_session set ? `
+                // (isLogin, loginTime, dueTime, loginNum) values ("1", '${myDate.toLocaleString()}', '${myDate.toLocaleString()}', '${results[0]+1}')
+                db.query(sql2, {
+                    userId: id,
+                    isLogin: '1',
+                    loginTime: myDate.toLocaleString(),
+                    dueTime: myDate.toLocaleString(),
+                    loginNum: '1',
+                    userName: name
+                }, (err, results) => {})
+            }
+        })
         req.session.user = {
+            userId: id,
             username: userinfo.username,
             login: 1,
-        }; // session 存储验证码数值
-
+        };
         res.send({
             status: 200,
             message: '登录成功！',
