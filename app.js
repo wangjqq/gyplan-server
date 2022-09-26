@@ -11,8 +11,8 @@ app.use(compression()) // 在其他中间件使用之前调用
 // 导入并配置 cors 中间件
 const cors = require('cors')
 app.use(cors({
-  // origin: 'http://119.91.65.198:8080',
-  origin: 'http://localhost:8080',
+  origin: 'http://119.91.65.198:8080',
+  // origin: 'http://localhost:8080',
   credentials: true
 }))
 app.use(cookieParser('secret'));
