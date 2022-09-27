@@ -20,4 +20,10 @@ router.post('/user/login', expressJoi(reg_login_schema), router_handler.login)
 // 发送验证码
 router.get('/user/captcha', router_handler.captcha)
 
+// 判断用户是否登录
+router.get('/user/islogin', router_handler.islogin)
+
+// 退出登录
+router.post('/user/logout', router_handler.logout)
+
 module.exports = router

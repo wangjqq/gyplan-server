@@ -11,8 +11,8 @@ app.use(compression()) // 在其他中间件使用之前调用
 // 导入并配置 cors 中间件
 const cors = require('cors')
 app.use(cors({
-  origin: 'http://119.91.65.198:8080',
-  // origin: 'http://localhost:8080',
+  // origin: 'http://119.91.65.198:8080',
+  origin: 'http://localhost:8080',
   credentials: true
 }))
 app.use(cookieParser('secret'));
@@ -39,7 +39,8 @@ app.use(express.urlencoded({
 
 // 一定要在路由之前，封装 res.cc 函数
 app.use((req, res, next) => {
-  if (req.originalUrl.split('/')[1] != 'user') {
+  console.log(req.session)
+  if (req.originalUrl.split('/')[1] != 'user' || req.originalUrl.split('/')[2] == 'islogin' || req.originalUrl.split('/')[2] == 'logout') {
     if (req.session.user != undefined) {
       if (req.session.user.login != 1) {
         res.send({

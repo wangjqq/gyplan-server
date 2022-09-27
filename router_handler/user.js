@@ -174,3 +174,35 @@ exports.captcha = (req, res) => {
     res.type('svg');
     res.status(200).send(captcha.data);
 }
+
+//用户是否登录的处理函数
+exports.islogin = (req, res) => {
+    const sql = 'select * from users_info where username=?'
+    // 执行SQL语句
+    db.query(sql, req.session.user.username, (err, results) => {
+        res.status(200).send({
+            status: 200,
+            data: results,
+            message: '返回成功,已登录'
+        });
+
+    })
+}
+
+//退出登录的处理函数
+exports.logout = (req, res) => {
+    var myDate = new Date();
+    const sql = `UPDATE user_session set ? WHERE userId=` + req.session.user.userId
+    // 执行SQL语句
+    db.query(sql, {
+        isLogin: '0',
+        loginTime: myDate.toLocaleString(),
+        dueTime: myDate.toLocaleString(),
+    }, (err, results) => {
+        req.session.destroy()
+        res.status(200).send({
+            message: '退出登陆成功'
+        });
+    })
+
+}
