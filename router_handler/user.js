@@ -156,9 +156,18 @@ exports.login = (req, res) => {
 }
 //发送验证码的处理函数
 exports.captcha = (req, res) => {
-    console.log(req.sessionID)
+    var codeConfig = {
+        size: 4, // 验证码长度
+        ignoreChars: '0o1i', // 验证码字符中排除 0o1i
+        noise: Math.floor(Math.random() * 5), //干扰线条数目_随机0-5条
+        height: 50,
+        inverse: false,
+        fontSize: 50,
+        color: true, //验证码字符是否有颜色，默认是没有，但是如果设置了背景颜色，那么默认就是有字符颜色
+        // background: '#ccc' //背景色
+    }
     var svgCaptcha = require('svg-captcha');
-    var captcha = svgCaptcha.create();
+    var captcha = svgCaptcha.create(codeConfig);
     req.session.capdata = captcha.text.toLowerCase(); // session 存储验证码数值
     // res.setHeader(" Access-Control-Allow-Credentials", true);
     // res.setHeader(" Access-Control-Allow-Origin", 'http://localhost:8080/');
