@@ -12,7 +12,7 @@ const {
 } = require('../schema/user')
 
 // 注册新用户
-router.post('/user/reguser', expressJoi(reg_login_schema), router_handler.regUser)
+router.post('/user/reguser', router_handler.regUser)
 
 // 登录
 router.post('/user/login', expressJoi(reg_login_schema), router_handler.login)

@@ -8,6 +8,8 @@ var session = require('express-session');
 const app = express()
 const compression = require('compression')
 app.use(compression()) // 在其他中间件使用之前调用
+let dotenv = require('dotenv');
+dotenv.config('./env');
 // 导入并配置 cors 中间件
 const cors = require('cors')
 app.use(cors({
@@ -28,7 +30,6 @@ app.use(session({
 // 创建服务器的实例对象
 
 
-
 const options = {
   rejectUnauthorized: false
 }
@@ -39,7 +40,7 @@ app.use(express.urlencoded({
 
 // 一定要在路由之前，封装 res.cc 函数
 app.use((req, res, next) => {
-  console.log(req.session)
+  console.log(req.originalUrl.split('/')[1])
   if (req.originalUrl.split('/')[1] != 'user' || req.originalUrl.split('/')[2] == 'islogin' || req.originalUrl.split('/')[2] == 'logout') {
     if (req.session.user != undefined) {
       if (req.session.user.login != 1) {
@@ -77,12 +78,19 @@ app.use(objMulter.any())
 // 导入并使用知识模块
 const knowledgeRouter = require('./router/knowledge')
 app.use('/api', knowledgeRouter)
+
 // 导入并使用通用模块
 const commonRouter = require('./router/common')
 app.use('/api', commonRouter)
+
 // 导入并使用元器件管理模块
 const imsRouter = require('./router/ims')
 app.use('/api', imsRouter)
+
+// 导入并使用短信模块
+const tencentcloudRouter = require('./router/tencentcloud')
+app.use(tencentcloudRouter)
+
 // 导入并使用用户路由模块
 const userRouter = require('./router/user')
 app.use(userRouter)

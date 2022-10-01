@@ -2,22 +2,17 @@
 const db = require('../db/index')
 // 导入bcryptjs这个包
 const bcrypt = require('bcryptjs')
+// 导入生成hash值的包
+const crypto = require('crypto')
+// 导入生成hash头像的包
+const Identicon = require('identicon.js')
+
 // 注册新用户的处理函数
 exports.regUser = (req, res) => {
+
     // console.log(req.session)
     // 获取客户端提交到服务器的用户信息
     const userinfo = req.body
-
-    // console.log(req.sessionID)
-    // console.log(userinfo);
-    // 对表单中的数据,进行合法性的校验
-    // if (!userinfo.username || !userinfo.password) {
-    //     return res.send({
-    //         status: 1,
-    //         message: '用户名或密码不合法'
-    //     })
-    // }
-
 
     // 定义SQL语句,查询用户名是否被占用
     const sqlStr = 'select * from users_info where username=?'
@@ -45,10 +40,15 @@ exports.regUser = (req, res) => {
         userinfo.password = bcrypt.hashSync(userinfo.password, 10)
         // 定义插入新用户的SQL语句
         const sql = 'insert into users_info set ?'
+        let hash = crypto.createHash('md5')
+        hash.update(userinfo.username); // 传入用户名
+        let imgData = new Identicon(hash.digest('hex')).toString()
+        let imgUrl = 'data:image/png;base64,' + imgData // 这就是头像的base64码
         // 调用db.squery()执行SQL语句
         db.query(sql, {
             username: userinfo.username,
-            password: userinfo.password
+            password: userinfo.password,
+            user_pic: imgUrl
         }, (err, results) => {
             // 判断SQL语句是否执行成功
             if (err) {
@@ -86,9 +86,9 @@ exports.login = (req, res) => {
     // 接受表单的数据
     const userinfo = req.body
     //  验证验证码
-    // if (userinfo.captcha != req.session.capdata) {
-    //     return res.cc('验证码错误')
-    // }
+    if (userinfo.captcha != req.session.capdata) {
+        return res.cc('验证码错误')
+    }
     // 定义SQL数据
     const sql = 'select * from users_info where username=?'
     // 执行SQL语句
@@ -128,7 +128,6 @@ exports.login = (req, res) => {
                     loginNum: loginNum1 + 1
                 }, (err, results) => {})
             } else {
-                console.log(111)
                 const sql2 = `insert into user_session set ? `
                 // (isLogin, loginTime, dueTime, loginNum) values ("1", '${myDate.toLocaleString()}', '${myDate.toLocaleString()}', '${results[0]+1}')
                 db.query(sql2, {
