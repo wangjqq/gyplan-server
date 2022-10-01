@@ -13,8 +13,8 @@ dotenv.config('./env');
 // 导入并配置 cors 中间件
 const cors = require('cors')
 app.use(cors({
-  // origin: 'http://119.91.65.198:8080',
-  origin: 'http://localhost:8080',
+  origin: 'http://119.91.65.198:8080',
+  // origin: 'http://localhost:8080',
   credentials: true
 }))
 app.use(cookieParser('secret'));
@@ -40,7 +40,6 @@ app.use(express.urlencoded({
 
 // 一定要在路由之前，封装 res.cc 函数
 app.use((req, res, next) => {
-  console.log(req.originalUrl.split('/')[1])
   if (req.originalUrl.split('/')[1] != 'user' || req.originalUrl.split('/')[2] == 'islogin' || req.originalUrl.split('/')[2] == 'logout') {
     if (req.session.user != undefined) {
       if (req.session.user.login != 1) {
@@ -109,7 +108,3 @@ app.use((err, req, res, next) => {
 app.listen(3007, () => {
   console.log('api服务器已启动于 http://127.0.0.1:3007')
 })
-
-// https.createServer(options, app).listen(3007, () => {
-//   console.log('Server Running');
-// })
