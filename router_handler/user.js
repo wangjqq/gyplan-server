@@ -99,7 +99,7 @@ exports.login = (req, res) => {
         }
         // 执行SQL语句成功,但是获取到的数据条数不等于1
         if (results.length !== 1) {
-            return res.cc('登陆失败')
+            return res.cc('登陆失败,没有此账号')
         }
         // TODO:判断密码是否正确
         // console.log(userinfo.password);
@@ -107,7 +107,7 @@ exports.login = (req, res) => {
         const compareResult = bcrypt.compareSync(userinfo.password, results[0].password)
         // console.log(compareResult);
         if (!compareResult) {
-            return res.cc('登陆失败!')
+            return res.cc('登陆失败,密码错误!')
         }
         // 登陆成功
         var myDate = new Date();

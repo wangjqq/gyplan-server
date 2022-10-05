@@ -40,6 +40,7 @@ app.use(express.urlencoded({
 
 // 一定要在路由之前，封装 res.cc 函数
 app.use((req, res, next) => {
+  console.log(req.session)
   if (req.originalUrl.split('/')[1] != 'user' || req.originalUrl.split('/')[2] == 'islogin' || req.originalUrl.split('/')[2] == 'logout') {
     if (req.session.user != undefined) {
       if (req.session.user.login != 1) {

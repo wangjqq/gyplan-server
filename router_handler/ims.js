@@ -6,9 +6,11 @@ exports.getAllImsList = (req, res) => {
   // 获取客户端提交到服务器的用户信息
   // const userinfo = req.body
   // 定义查询语句
-  const sqlStr = 'select * from ims_info'
+  const sqlStr = 'select * from ims_info where ?'
 
-  db.query(sqlStr, (err, results) => {
+  db.query(sqlStr, {
+    user_id: req.session.user.userId
+  }, (err, results) => {
     // 执行 SQL 语句失败
     if (err) {
       return res.cc(err)
@@ -25,12 +27,9 @@ exports.getImsListByType = (req, res) => {
   // 获取客户端提交到服务器的用户信息
   const userinfo = req.query
   // 定义查询语句
-  console.log(userinfo);
-  const sqlStr = 'select * from ims_info where ?'
-
-  db.query(sqlStr, {
-    type_id: userinfo.type_id
-  }, (err, results) => {
+  const sqlStr = `select * from ims_info where type_id=${userinfo.type_id} and user_id=${req.session.user.userId}`
+  console.log(userinfo.type_id, req.session.user.userId)
+  db.query(sqlStr, (err, results) => {
     // 执行 SQL 语句失败
     if (err) {
       return res.cc(err)
@@ -47,7 +46,7 @@ exports.getTypeList = (req, res) => {
   // 获取客户端提交到服务器的用户信息
   // const userinfo = req.body
   // 定义查询语句
-  const sqlStr = 'select * from ims_type'
+  const sqlStr = `select * from ims_type where type_user_id in (0,${req.session.user.userId})`
 
   db.query(sqlStr, (err, results) => {
     // 执行 SQL 语句失败
@@ -80,7 +79,8 @@ exports.addItem = (req, res) => {
     price: userinfo.price,
     smt: userinfo.smt,
     size: userinfo.size,
-    place: userinfo.place
+    place: userinfo.place,
+    user_id: req.session.user.userId
   }, (err, results) => {
     // 执行 SQL 语句失败
     if (err) {
@@ -102,6 +102,7 @@ exports.addItemType = (req, res) => {
   db.query(sqlStr, {
     type_name: userinfo.type_name,
     type_father_id: userinfo.type_father_id,
+    type_user_id: req.session.user.userId
   }, (err, results) => {
     // 执行 SQL 语句失败
     if (err) {
