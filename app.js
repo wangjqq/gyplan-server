@@ -1,7 +1,10 @@
 // 导入 express
 const fs = require('fs')
-const express = require('express')
 const https = require('https')
+const path = require('path')
+
+const express = require('express')
+
 const multer = require('multer')
 const joi = require('joi')
 var cookieParser = require('cookie-parser');
@@ -14,8 +17,8 @@ dotenv.config('./env');
 // 导入并配置 cors 中间件
 const cors = require('cors')
 app.use(cors({
-  origin: 'https://119.91.65.198',
-  // origin: 'http://localhost:8080',
+  // origin: 'https://119.91.65.198',
+  origin: 'https://localhost:8080',
   credentials: true
 }))
 app.use(cookieParser('secret'));
@@ -94,6 +97,9 @@ app.use(tencentcloudRouter)
 
 // 导入并使用用户路由模块
 const userRouter = require('./router/user')
+const {
+  required
+} = require('joi')
 app.use(userRouter)
 
 // 定义错误级别的中间件
@@ -113,5 +119,5 @@ const options1 = {
 var server = https.createServer(options, app);
 // 启动服务器
 server.listen(3007, () => {
-  console.log('api服务器已启动于 http://127.0.0.1:3007')
+  console.log('api服务器已启动于 https://127.0.0.1:3007')
 })
