@@ -1,4 +1,5 @@
 // 导入 express
+const fs = require('fs')
 const express = require('express')
 const https = require('https')
 const multer = require('multer')
@@ -105,7 +106,12 @@ app.use((err, req, res, next) => {
   res.cc(err)
 })
 
+const options1 = {
+  key: fs.readFileSync('./public/ssl/wangjingqi.top.key'),
+  cert: fs.readFileSync('./public/ssl/wangjingqi.top_bundle.pem'),
+}
+var server = https.createServer(options, app);
 // 启动服务器
-app.listen(3007, () => {
+server.listen(3007, () => {
   console.log('api服务器已启动于 http://127.0.0.1:3007')
 })
