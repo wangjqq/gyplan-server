@@ -17,8 +17,8 @@ dotenv.config('./env');
 // 导入并配置 cors 中间件
 const cors = require('cors')
 app.use(cors({
-  // origin: 'https://119.91.65.198',
-  origin: 'https://localhost:8080',
+  origin: 'https://119.91.65.198',
+  // origin: 'https://localhost:8080',
   credentials: true
 }))
 app.use(cookieParser('secret'));
