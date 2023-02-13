@@ -84,13 +84,21 @@ exports.regUser = (req, res) => {
 //登录的处理函数
 exports.login = (req, res) => {
     // 接受表单的数据
-    const userinfo = req.body
+    // console.log(req)
+    let userinfo = req.body
+
     //  验证验证码
-    if (userinfo.captcha != req.session.capdata) {
-        return res.cc('验证码错误')
-    }
+    // req.session.capdata.trim()
+    // userinfo.captcha.trim()
+    // console.log(typeof req.session.capdata + '~~~~' + typeof userinfo.capdata)
+    // if (userinfo.captcha.trim() != req.session.capdata.trim()) {
+    //     res.cc('验证码错误')
+    //     console.log('验证码错误')
+    //     return
+    // }
     // 定义SQL数据
     const sql = 'select * from users_info where username=?'
+    console.log(req.query)
     // 执行SQL语句
     db.query(sql, userinfo.username, (err, results) => {
         // 执行SQL语句失败
@@ -168,6 +176,7 @@ exports.captcha = (req, res) => {
     var svgCaptcha = require('svg-captcha');
     var captcha = svgCaptcha.create(codeConfig);
     req.session.capdata = captcha.text.toLowerCase(); // session 存储验证码数值
+    console.log(req.session.capdata)
     // res.setHeader(" Access-Control-Allow-Credentials", true);
     // res.setHeader(" Access-Control-Allow-Origin", 'http://localhost:8080/');
     res.type('svg');

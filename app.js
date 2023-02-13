@@ -7,21 +7,29 @@ const express = require('express')
 
 const multer = require('multer')
 const joi = require('joi')
-var cookieParser = require('cookie-parser');
-var session = require('express-session');
+var cookieParser = require('cookie-parser')
+var session = require('express-session')
 const app = express()
+const options1 = {
+  key: fs.readFileSync('./public/ssl/wangjingqi.top.key'),
+  cert: fs.readFileSync('./public/ssl/wangjingqi.top_bundle.pem'),
+}
+var server = https.createServer(options1, app)
 const compression = require('compression')
 app.use(compression()) // 在其他中间件使用之前调用
-let dotenv = require('dotenv');
-dotenv.config('./env');
+
+app.use(express.static('C:/wwwroot/images')) // 设置静态图片访问的路径
+
+let dotenv = require('dotenv')
+dotenv.config('./env')
 // 导入并配置 cors 中间件
 const cors = require('cors')
 app.use(cors({
-  // origin: 'https://119.91.65.198',
-  // origin: 'http://127.0.0.1:8080',
-  // credentials: true
+  // origin: 'https://wangjingqi.top',
+  origin: 'https://localhost:8080',
+  credentials: true
 }))
-app.use(cookieParser('secret'));
+app.use(cookieParser('secret'))
 app.use(session({
   secret: 'secret', // 对session id 相关的cookie 进行签名
   resave: true,
@@ -30,7 +38,7 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 12, // 设置 session 的有效时间，单位毫秒,12小时
     // maxAge: 1000 * 30, // 设置 session 的有效时间，单位毫秒,30秒
   },
-}));
+}))
 // 创建服务器的实例对象
 
 
@@ -44,8 +52,10 @@ app.use(express.urlencoded({
 
 // 一定要在路由之前，封装 res.cc 函数
 app.use((req, res, next) => {
-  console.log(req.session)
-  if (req.originalUrl.split('/')[1] != 'user' || req.originalUrl.split('/')[2] == 'islogin' || req.originalUrl.split('/')[2] == 'logout') {
+  console.log(req.sessionID)
+  console.log(req.originalUrl)
+  // console.log(req.originalUrl)
+  if (req.headers.from != "wxmp" && ((req.originalUrl.split('/')[1] != 'user' && req.originalUrl.split('/')[1] != 'system') || req.originalUrl.split('/')[2] == 'islogin' || req.originalUrl.split('/')[2] == 'logout')) {
     if (req.session.user != undefined) {
       if (req.session.user.login != 1) {
         res.send({
@@ -95,6 +105,10 @@ app.use('/api', imsRouter)
 const tencentcloudRouter = require('./router/tencentcloud')
 app.use(tencentcloudRouter)
 
+// 导入并使用系统模块
+const systemRouter = require('./router/system')
+app.use(systemRouter)
+
 // 导入并使用用户路由模块
 const userRouter = require('./router/user')
 const {
@@ -112,12 +126,11 @@ app.use((err, req, res, next) => {
   res.cc(err)
 })
 
-const options1 = {
-  key: fs.readFileSync('./public/ssl/wangjingqi.top.key'),
-  cert: fs.readFileSync('./public/ssl/wangjingqi.top_bundle.pem'),
-}
-var server = https.createServer(options, app);
+
 // 启动服务器
+app.listen(3000, () => {
+  console.log('api服务器已启动于 http://127.0.0.1')
+})
 server.listen(3007, () => {
   console.log('api服务器已启动于 https://127.0.0.1:3007')
 })

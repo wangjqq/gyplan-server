@@ -28,7 +28,6 @@ exports.getImsListByType = (req, res) => {
   const userinfo = req.query
   // 定义查询语句
   const sqlStr = `select * from ims_info where type_id=${userinfo.type_id} and user_id=${req.session.user.userId}`
-  console.log(userinfo.type_id, req.session.user.userId)
   db.query(sqlStr, (err, results) => {
     // 执行 SQL 语句失败
     if (err) {
@@ -63,8 +62,10 @@ exports.getTypeList = (req, res) => {
 
 // 新增元器件
 exports.addItem = (req, res) => {
-  const userinfo = req.query
+  const userinfo = req.body
   // 定义新增语句
+  console.log(req.body)
+  console.log(req.query)
   const sqlStr = `insert into ims_info set ?`
   db.query(sqlStr, {
     type_id: userinfo.type_id,
