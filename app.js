@@ -102,8 +102,9 @@ const imsRouter = require('./router/ims')
 app.use('/api', imsRouter)
 
 // 导入并使用短信模块
-const tencentcloudRouter = require('./router/tencentcloud')
-app.use(tencentcloudRouter)
+const aliyunRouter = require('./router/aliyun')
+app.use(aliyunRouter)
+
 
 // 导入并使用系统模块
 const systemRouter = require('./router/system')
@@ -126,9 +127,10 @@ app.use((err, req, res, next) => {
   res.cc(err)
 })
 
-
+// const aliyun_handler = require('./router_handler/aliyun')
+// console.log(aliyun_handler.sendSms())
 // 启动服务器
-app.listen(3000, () => {
+app.listen(3001, () => {
   console.log('api服务器已启动于 http://127.0.0.1')
 })
 server.listen(3007, () => {

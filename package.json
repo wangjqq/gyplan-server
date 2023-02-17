@@ -1,5 +1,11 @@
 {
   "dependencies": {
+    "@alicloud/dysmsapi20170525": "^2.0.23",
+    "@alicloud/openapi-client": "^0.4.5",
+    "@alicloud/pop-core": "^1.7.12",
+    "@alicloud/sms-sdk": "^1.1.6",
+    "@alicloud/tea-util": "^1.4.5",
+    "@babel/preset-env": "^7.20.2",
     "@escook/express-joi": "^1.1.1",
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
@@ -18,7 +24,6 @@
     "mysql": "^2.18.1",
     "path": "^0.12.7",
     "session": "^0.1.0",
-    "svg-captcha": "^1.4.0",
-    "tencentcloud-sdk-nodejs": "^4.0.452"
+    "svg-captcha": "^1.4.0"
   }
 }
