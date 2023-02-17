@@ -5,9 +5,6 @@ exports.sendSms = (req, res) => {
   var client = new Core({
     accessKeyId: process.env.accessKeyId,
     accessKeySecret: process.env.secretAccessKey,
-    // accessKeyId: "LTAI5tHX8XLSVqHQwnL3y2Fj",
-    // accessKeySecret: "jcWbnEZ5W1xutY2ILu8Q6u7Gaa3g29",
-    // securityToken: '<your-sts-token>', // use STS Token
     endpoint: 'https://dysmsapi.aliyuncs.com',
     apiVersion: '2017-05-25'
   })
