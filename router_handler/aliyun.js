@@ -10,9 +10,9 @@ exports.sendSms = (req, res) => {
   })
 
   var params = {
-    "PhoneNumbers": req.body.number,
+    "PhoneNumbers": req.body.phoneNumber,
     "SignName": "元器件学习计划",
-    "TemplateParam": `{\"code\":${req.body.code}}`,
+    "TemplateParam": `{\"code\":${req.body.phoneCode}}`,
     "TemplateCode": "SMS_270315360",
     "OutId": ""
   }

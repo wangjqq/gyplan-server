@@ -41,7 +41,7 @@ exports.regUser = (req, res) => {
         // 定义插入新用户的SQL语句
         const sql = 'insert into users_info set ?'
         let hash = crypto.createHash('md5')
-        hash.update(userinfo.username); // 传入用户名
+        hash.update(userinfo.username) // 传入用户名
         let imgData = new Identicon(hash.digest('hex')).toString()
         let imgUrl = 'data:image/png;base64,' + imgData // 这就是头像的base64码
         // 调用db.squery()执行SQL语句
@@ -118,7 +118,7 @@ exports.login = (req, res) => {
             return res.cc('登陆失败,密码错误!')
         }
         // 登陆成功
-        var myDate = new Date();
+        var myDate = new Date()
         var id = results[0].id
         var name = results[0].username
         const sql1 = 'select * from user_session where userId=?'
@@ -134,7 +134,7 @@ exports.login = (req, res) => {
                     loginTime: myDate.toLocaleString(),
                     dueTime: myDate.toLocaleString(),
                     loginNum: loginNum1 + 1
-                }, (err, results) => {})
+                }, (err, results) => { })
             } else {
                 const sql2 = `insert into user_session set ? `
                 // (isLogin, loginTime, dueTime, loginNum) values ("1", '${myDate.toLocaleString()}', '${myDate.toLocaleString()}', '${results[0]+1}')
@@ -145,14 +145,14 @@ exports.login = (req, res) => {
                     dueTime: myDate.toLocaleString(),
                     loginNum: '1',
                     userName: name
-                }, (err, results) => {})
+                }, (err, results) => { })
             }
         })
         req.session.user = {
             userId: id,
             username: userinfo.username,
             login: 1,
-        };
+        }
         res.send({
             status: 200,
             message: '登录成功！',
@@ -173,14 +173,14 @@ exports.captcha = (req, res) => {
         color: true, //验证码字符是否有颜色，默认是没有，但是如果设置了背景颜色，那么默认就是有字符颜色
         // background: '#ccc' //背景色
     }
-    var svgCaptcha = require('svg-captcha');
-    var captcha = svgCaptcha.create(codeConfig);
-    req.session.capdata = captcha.text.toLowerCase(); // session 存储验证码数值
+    var svgCaptcha = require('svg-captcha')
+    var captcha = svgCaptcha.create(codeConfig)
+    req.session.capdata = captcha.text.toLowerCase() // session 存储验证码数值
     console.log(req.session.capdata)
     // res.setHeader(" Access-Control-Allow-Credentials", true);
     // res.setHeader(" Access-Control-Allow-Origin", 'http://localhost:8080/');
-    res.type('svg');
-    res.status(200).send(captcha.data);
+    res.type('svg')
+    res.status(200).send(captcha.data)
 }
 
 //用户是否登录的处理函数
@@ -192,14 +192,14 @@ exports.islogin = (req, res) => {
             status: 200,
             data: results,
             message: '返回成功,已登录'
-        });
+        })
 
     })
 }
 
 //退出登录的处理函数
 exports.logout = (req, res) => {
-    var myDate = new Date();
+    var myDate = new Date()
     const sql = `UPDATE user_session set ? WHERE userId=` + req.session.user.userId
     // 执行SQL语句
     db.query(sql, {
@@ -210,7 +210,7 @@ exports.logout = (req, res) => {
         req.session.destroy()
         res.status(200).send({
             message: '退出登陆成功'
-        });
+        })
     })
 
 }
