@@ -1,15 +1,17 @@
-// 导入 express
+
+//
+
+// 导入数据库操作模块
+// const db = require('./db/index')
 const fs = require('fs')
 const https = require('https')
-const path = require('path')
-
-const express = require('express')
-
+const express = require('express')// 导入 express
 const multer = require('multer')
 const joi = require('joi')
 var cookieParser = require('cookie-parser')
 var session = require('express-session')
 const app = express()
+
 const options1 = {
   key: fs.readFileSync('./public/ssl/wangjingqi.top.key'),
   cert: fs.readFileSync('./public/ssl/wangjingqi.top_bundle.pem'),
@@ -22,6 +24,8 @@ app.use(express.static('C:/wwwroot/images')) // 设置静态图片访问的路�
 
 let dotenv = require('dotenv')
 dotenv.config('./env')
+const db = require('./db/index')
+
 // 导入并配置 cors 中间件
 const cors = require('cors')
 app.use(cors({
@@ -54,23 +58,29 @@ app.use(express.urlencoded({
 app.use((req, res, next) => {
   console.log(req.sessionID)
   console.log(req.originalUrl)
+  const sqlStr = 'select * from users_info where sessionID=?'
+
   // console.log(req.originalUrl)
-  if (req.headers.from != "wxmp" && ((req.originalUrl.split('/')[1] != 'user' && req.originalUrl.split('/')[1] != 'system') || req.originalUrl.split('/')[2] == 'islogin' || req.originalUrl.split('/')[2] == 'logout')) {
-    if (req.session.user != undefined) {
-      if (req.session.user.login != 1) {
-        res.send({
-          status: 201,
-          message: "登录过期,请重新登录",
-        })
-        return
+  if (req.headers.from != "wxmp" && (req.originalUrl.split('/')[1] != 'user' && req.originalUrl.split('/')[1] != 'system')) {
+    db.query(sqlStr, req.sessionID, (err, results) => {
+      if (results.length === 1) {
+        if (results[0].islogin === "0") {
+          res.send({
+            status: 201,
+            message: "登录过期,请重新登录",
+          })
+          return
+        } else {
+          res.send({
+            status: 202,
+            message: "请登录",
+          })
+          return
+        }
+      } else {
+
       }
-    } else {
-      res.send({
-        status: 202,
-        message: "请登录",
-      })
-      return
-    }
+    })
   }
 
   // status 默认值为 500，表示失败的情况
@@ -126,7 +136,8 @@ app.use((err, req, res, next) => {
   // 未知的错误
   res.cc(err)
 })
-
+const { init } = require('./util/init')
+init() //初始化
 // const aliyun_handler = require('./router_handler/aliyun')
 // console.log(aliyun_handler.sendSms())
 // 启动服务器

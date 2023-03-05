@@ -161,6 +161,115 @@ exports.login = (req, res) => {
 
 
 }
+
+//登录的处理函数
+exports.login1 = (req, res) => {
+    // 接受表单的数据
+    // console.log(req.body)
+    let userinfo = req.body
+
+    // 定义SQL数据
+    const sql = 'select * from users_login where sessionID=?'
+    // console.log(req.query)
+    // 执行SQL语句
+    db.query(sql, req.sessionID, (err, results) => {
+        // 执行SQL语句失败
+        if (err) {
+            return res.cc(err)
+        }
+        // 执行SQL语句成功,但是获取到的数据条数不等于1
+        if (results.length !== 1) {
+            return res.cc('登陆失败,没有此账号')
+        }
+        let dbData = results[0]
+        if (dbData.phoneNumber === userinfo.phoneNumber && dbData.smsCode === userinfo.phoneCode && dbData.picCode === userinfo.captcha) {
+            const sql1 = 'select * from users_info where phoneNumber=?'
+            db.query(sql1, userinfo.phoneNumber, (err, results) => {
+                let myDate = new Date()
+                console.log(results)
+                if (results.length === 1) {
+                    const sql2 = `UPDATE users_info set ? WHERE phoneNumber=` + userinfo.phoneNumber
+
+                    db.query(sql2, {
+                        isLogin: '1',
+                        loginTime: myDate.toLocaleString(),
+                        dueTime: myDate.toLocaleString(),
+                        loginNum: parseInt(results[0].loginNum) + 1,
+                        sessionID: req.sessionID,
+                    }, (err, results) => { })
+                } else {
+                    const sql3 = `insert into users_info set ? `
+                    let hash = crypto.createHash('md5')
+                    hash.update(userinfo.phoneNumber) // 传入用户名
+                    let imgData = new Identicon(hash.digest('hex')).toString()
+                    let imgUrl = 'data:image/png;base64,' + imgData // 这就是头像的base64码
+
+                    db.query(sql3, {
+                        isLogin: '1',
+                        loginTime: myDate.toLocaleString(),
+                        dueTime: myDate.toLocaleString(),
+                        loginNum: '1',
+                        phoneNumber: userinfo.phoneNumber,
+                        userPic: imgUrl
+                    }, (err, results) => {
+                        console.log(err)
+                        console.log(results)
+                    })
+                }
+                res.send({
+                    status: 200,
+                    message: '登录成功！',
+                })
+                return
+            })
+        } else {
+            return res.cc('登陆失败,请尝试重新获取验证码再次登陆!')
+        }
+        // 登陆成功
+        // var myDate = new Date()
+        // var id = results[0].id
+        // var name = results[0].username
+        // const sql1 = 'select * from user_session where userId=?'
+        // db.query(sql1, results[0].id, (err, results) => {
+
+        //     if (results.length == 1) {
+        //         var loginNum1 = results[0].loginNum
+        //         const sql2 = `UPDATE user_session set ? WHERE userId=` + id
+        //         console.log(sql2)
+        //         // (isLogin, loginTime, dueTime, loginNum) values ("1", '${myDate.toLocaleString()}', '${myDate.toLocaleString()}', '${results[0]+1}')
+        //         db.query(sql2, {
+        //             isLogin: '1',
+        //             loginTime: myDate.toLocaleString(),
+        //             dueTime: myDate.toLocaleString(),
+        //             loginNum: loginNum1 + 1
+        //         }, (err, results) => { })
+        //     } else {
+        //         const sql2 = `insert into user_session set ? `
+        //         // (isLogin, loginTime, dueTime, loginNum) values ("1", '${myDate.toLocaleString()}', '${myDate.toLocaleString()}', '${results[0]+1}')
+        //         db.query(sql2, {
+        //             userId: id,
+        //             isLogin: '1',
+        //             loginTime: myDate.toLocaleString(),
+        //             dueTime: myDate.toLocaleString(),
+        //             loginNum: '1',
+        //             userName: name
+        //         }, (err, results) => { })
+        //     }
+        // })
+        // req.session.user = {
+        //     userId: id,
+        //     username: userinfo.username,
+        //     login: 1,
+        // }
+        // res.send({
+        //     status: 200,
+        //     message: '登录成功！',
+        // })
+    })
+
+
+}
+
 //发送验证码的处理函数
 exports.captcha = (req, res) => {
     var codeConfig = {
@@ -175,24 +284,49 @@ exports.captcha = (req, res) => {
     }
     var svgCaptcha = require('svg-captcha')
     var captcha = svgCaptcha.create(codeConfig)
-    req.session.capdata = captcha.text.toLowerCase() // session 存储验证码数值
-    console.log(req.session.capdata)
-    // res.setHeader(" Access-Control-Allow-Credentials", true);
-    // res.setHeader(" Access-Control-Allow-Origin", 'http://localhost:8080/');
+    // req.session.capdata = captcha.text.toLowerCase() // session 存储验证码数值
+    // console.log(req.session.capdata)
     res.type('svg')
     res.status(200).send(captcha.data)
+    const sql = `select * from users_login where sessionID=?`
+    db.query(sql, req.sessionID, (err, results) => {
+        // console.log(err)
+        if (results.length === 0) {
+            const sql1 = 'insert into users_login set ?'
+            db.query(sql1, {
+                picCode: captcha.text.toLowerCase(),
+                sessionID: req.sessionID
+            }, (err, results) => { })
+        } else {
+            const sql2 = `UPDATE users_login set ? WHERE id=` + results[0].id
+            db.query(sql2, {
+                picCode: captcha.text.toLowerCase(),
+            }, (err, results) => { })
+        }
+    })
 }
 
 //用户是否登录的处理函数
 exports.islogin = (req, res) => {
-    const sql = 'select * from users_info where username=?'
+    const sql = 'select * from users_info where sessionID=?'
     // 执行SQL语句
-    db.query(sql, req.session.user.username, (err, results) => {
-        res.status(200).send({
-            status: 200,
-            data: results,
-            message: '返回成功,已登录'
-        })
+    db.query(sql, req.sessionID, (err, results) => {
+        // console.log(err, results)
+        if (results.length === 1) {
+            res.send({
+                status: 200,
+                data: results,
+                message: '返回成功,已登录'
+            })
+            return
+        } else {
+            res.send({
+                status: 202,
+                message: "请登录",
+            })
+            return
+        }
+
 
     })
 }
@@ -200,12 +334,12 @@ exports.islogin = (req, res) => {
 //退出登录的处理函数
 exports.logout = (req, res) => {
     var myDate = new Date()
-    const sql = `UPDATE user_session set ? WHERE userId=` + req.session.user.userId
+    const sql = `UPDATE info set ? WHERE sessionID=` + req.sessionID
     // 执行SQL语句
     db.query(sql, {
         isLogin: '0',
-        loginTime: myDate.toLocaleString(),
-        dueTime: myDate.toLocaleString(),
+        // loginTime: myDate.toLocaleString(),
+        // dueTime: myDate.toLocaleString(),
     }, (err, results) => {
         req.session.destroy()
         res.status(200).send({

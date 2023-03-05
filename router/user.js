@@ -16,7 +16,8 @@ router.post('/user/reguser', router_handler.regUser)
 
 // 登录
 // router.post('/user/login', expressJoi(reg_login_schema), router_handler.login)
-router.post('/user/login', router_handler.login)
+// router.post('/user/login', router_handler.login)
+router.post('/user/login', router_handler.login1)
 
 // 发送验证码
 router.get('/user/captcha', router_handler.captcha)
