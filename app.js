@@ -62,25 +62,25 @@ app.use((req, res, next) => {
 
   // console.log(req.originalUrl)
   if (req.headers.from != "wxmp" && (req.originalUrl.split('/')[1] != 'user' && req.originalUrl.split('/')[1] != 'system')) {
-    db.query(sqlStr, req.sessionID, (err, results) => {
-      if (results.length === 1) {
-        if (results[0].islogin === "0") {
-          res.send({
-            status: 201,
-            message: "登录过期,请重新登录",
-          })
-          return
-        } else {
-          res.send({
-            status: 202,
-            message: "请登录",
-          })
-          return
-        }
-      } else {
+    // db.query(sqlStr, req.sessionID, (err, results) => {
+    //   if (results.length === 1) {
+    //     if (results[0].islogin === "0") {
+    //       res.send({
+    //         status: 201,
+    //         message: "登录过期,请重新登录",
+    //       })
+    //       return
+    //     } else {
+    //       res.send({
+    //         status: 202,
+    //         message: "请登录",
+    //       })
+    //       return
+    //     }
+    //   } else {
 
-      }
-    })
+    //   }
+    // })
   }
 
   // status 默认值为 500，表示失败的情况

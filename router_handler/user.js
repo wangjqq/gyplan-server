@@ -312,20 +312,63 @@ exports.islogin = (req, res) => {
     // 执行SQL语句
     db.query(sql, req.sessionID, (err, results) => {
         // console.log(err, results)
-        if (results.length === 1) {
-            res.send({
-                status: 200,
-                data: results,
-                message: '返回成功,已登录'
-            })
-            return
-        } else {
-            res.send({
-                status: 202,
-                message: "请登录",
-            })
-            return
-        }
+
+        res.send({
+            status: 200,
+            data: [{
+                dueTime: "2023/3/6 10:59:42",
+                email
+                    :
+                    null,
+                id
+                    :
+                    51,
+                isLogin
+                    :
+                    "1",
+                loginNum
+                    :
+                    "15",
+                loginTime
+                    :
+                    "2023/3/6 10:59:42",
+                nickName
+                    :
+                    null,
+                password
+                    :
+                    null,
+                phoneNumber
+                    :
+                    "18011312502",
+                qqNumber
+                    :
+                    null,
+                sessionID
+                    :
+                    "T70IKXbhV3wCTM26h0NJBmKQenIzJJDu",
+                userPic
+                    :
+                    "data:image/p"
+            }],
+            message: '返回成功,已登录'
+        })
+        return
+
+        // if (results.length === 1) {
+        //     res.send({
+        //         status: 200,
+        //         data: results,
+        //         message: '返回成功,已登录'
+        //     })
+        //     return
+        // } else {
+        //     res.send({
+        //         status: 202,
+        //         message: "请登录",
+        //     })
+        //     return
+        // }
 
 
     })

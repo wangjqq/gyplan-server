@@ -7,9 +7,8 @@ exports.getAllImsList = (req, res) => {
   // const userinfo = req.body
   // 定义查询语句
   const sqlStr = 'select * from ims_info where ?'
-
   db.query(sqlStr, {
-    user_id: req.session.user.userId
+    user_id: req.query.id
   }, (err, results) => {
     // 执行 SQL 语句失败
     if (err) {
@@ -27,7 +26,7 @@ exports.getImsListByType = (req, res) => {
   // 获取客户端提交到服务器的用户信息
   const userinfo = req.query
   // 定义查询语句
-  const sqlStr = `select * from ims_info where type_id=${userinfo.type_id} and user_id=${req.session.user.userId}`
+  const sqlStr = `select * from ims_info where type_id=${userinfo.type_id} and user_id=${userinfo.id}`
   db.query(sqlStr, (err, results) => {
     // 执行 SQL 语句失败
     if (err) {
@@ -45,7 +44,7 @@ exports.getTypeList = (req, res) => {
   // 获取客户端提交到服务器的用户信息
   // const userinfo = req.body
   // 定义查询语句
-  const sqlStr = `select * from ims_type where type_user_id in (0,${req.session.user.userId})`
+  const sqlStr = `select * from ims_type where type_user_id in (0,${req.query.id})`
 
   db.query(sqlStr, (err, results) => {
     // 执行 SQL 语句失败
@@ -62,10 +61,8 @@ exports.getTypeList = (req, res) => {
 
 // 新增元器件
 exports.addItem = (req, res) => {
-  const userinfo = req.body
+  const userinfo = req.query
   // 定义新增语句
-  console.log(req.body)
-  console.log(req.query)
   const sqlStr = `insert into ims_info set ?`
   db.query(sqlStr, {
     type_id: userinfo.type_id,
@@ -81,7 +78,7 @@ exports.addItem = (req, res) => {
     smt: userinfo.smt,
     size: userinfo.size,
     place: userinfo.place,
-    user_id: req.session.user.userId
+    user_id: userinfo.id
   }, (err, results) => {
     // 执行 SQL 语句失败
     if (err) {
@@ -103,7 +100,7 @@ exports.addItemType = (req, res) => {
   db.query(sqlStr, {
     type_name: userinfo.type_name,
     type_father_id: userinfo.type_father_id,
-    type_user_id: req.session.user.userId
+    type_user_id: userinfo.id
   }, (err, results) => {
     // 执行 SQL 语句失败
     if (err) {
@@ -112,6 +109,21 @@ exports.addItemType = (req, res) => {
     res.send({
       status: 200,
       message: '添加元器件分类成功！',
+      data: results,
+    })
+  })
+}
+
+// 获取所有元器件使用列表
+exports.getAllUseList = (req, res) => {
+  const sqlStr = 'select * from ims_use where userId=?'
+  db.query(sqlStr, req.query.id, (err, results) => {
+    if (err) {
+      return res.cc(err)
+    }
+    res.send({
+      status: 200,
+      message: '获取所有元器件使用列表成功',
       data: results,
     })
   })
