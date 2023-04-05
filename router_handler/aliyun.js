@@ -44,9 +44,9 @@ exports.sendSms = (req, res) => {
 
   }
 
-  // client.request('SendSms', params, requestOption).then((result) => {
-  //   res.send(JSON.stringify(result))
-  // }, (ex) => {
-  //   res.send(ex)
-  // })
+  client.request('SendSms', params, requestOption).then((result) => {
+    res.send(JSON.stringify(result))
+  }, (ex) => {
+    res.send(ex)
+  })
 }
