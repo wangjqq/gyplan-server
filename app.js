@@ -1,11 +1,10 @@
-
 //
 
 // 导入数据库操作模块
 // const db = require('./db/index')
 const fs = require('fs')
 const https = require('https')
-const express = require('express')// 导入 express
+const express = require('express') // 导入 express
 const multer = require('multer')
 const joi = require('joi')
 var cookieParser = require('cookie-parser')
@@ -28,31 +27,36 @@ const db = require('./db/index')
 
 // 导入并配置 cors 中间件
 const cors = require('cors')
-app.use(cors({
-  // origin: 'https://wangjingqi.top',
-  origin: 'https://localhost:8080',
-  credentials: true
-}))
+app.use(
+  cors({
+    // origin: 'https://wangjingqi.top',
+    origin: 'https://localhost:8080',
+    credentials: true,
+  })
+)
 app.use(cookieParser('secret'))
-app.use(session({
-  secret: 'secret', // 对session id 相关的cookie 进行签名
-  resave: true,
-  saveUninitialized: true, // 是否保存未初始化的会话
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 12, // 设置 session 的有效时间，单位毫秒,12小时
-    // maxAge: 1000 * 30, // 设置 session 的有效时间，单位毫秒,30秒
-  },
-}))
+app.use(
+  session({
+    secret: 'secret', // 对session id 相关的cookie 进行签名
+    resave: true,
+    saveUninitialized: true, // 是否保存未初始化的会话
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 12, // 设置 session 的有效时间，单位毫秒,12小时
+      // maxAge: 1000 * 30, // 设置 session 的有效时间，单位毫秒,30秒
+    },
+  })
+)
 // 创建服务器的实例对象
 
-
 const options = {
-  rejectUnauthorized: false
+  rejectUnauthorized: false,
 }
 // 配置解析表单数据的中间件，注意：这个中间件，只能解析 application/x-www-form-urlencoded 格式的表单数据
-app.use(express.urlencoded({
-  extended: false
-}))
+app.use(
+  express.urlencoded({
+    extended: false,
+  })
+)
 
 // 一定要在路由之前，封装 res.cc 函数
 app.use((req, res, next) => {
@@ -61,7 +65,11 @@ app.use((req, res, next) => {
   const sqlStr = 'select * from users_info where sessionID=?'
 
   // console.log(req.originalUrl)
-  if (req.headers.from != "wxmp" && (req.originalUrl.split('/')[1] != 'user' && req.originalUrl.split('/')[1] != 'system')) {
+  if (
+    req.headers.from != 'wxmp' &&
+    req.originalUrl.split('/')[1] != 'user' &&
+    req.originalUrl.split('/')[1] != 'system'
+  ) {
     // db.query(sqlStr, req.sessionID, (err, results) => {
     //   if (results.length === 1) {
     //     if (results[0].islogin === "0") {
@@ -78,7 +86,6 @@ app.use((req, res, next) => {
     //       return
     //     }
     //   } else {
-
     //   }
     // })
   }
@@ -95,7 +102,7 @@ app.use((req, res, next) => {
 })
 
 var objMulter = multer({
-  dest: './upload/'
+  dest: './upload/',
 })
 app.use(objMulter.any())
 
@@ -115,16 +122,17 @@ app.use('/api', imsRouter)
 const aliyunRouter = require('./router/aliyun')
 app.use(aliyunRouter)
 
-
 // 导入并使用系统模块
 const systemRouter = require('./router/system')
 app.use(systemRouter)
 
+// 导入并使用资讯模块
+const newsRouter = require('./router/news')
+app.use(newsRouter)
+
 // 导入并使用用户路由模块
 const userRouter = require('./router/user')
-const {
-  required
-} = require('joi')
+const { required } = require('joi')
 app.use(userRouter)
 
 // 定义错误级别的中间件
