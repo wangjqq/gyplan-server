@@ -34,3 +34,39 @@ exports.getNewContentById = (req, res) => {
     })
   })
 }
+
+// 查看新闻
+exports.viewNews = (req, res) => {
+  const userinfo = req.body
+  console.log(userinfo)
+  const sqlStr = `UPDATE news_info set ? WHERE id=` + userinfo.id
+  db.query(sqlStr, { view: userinfo.view }, (err, results) => {
+    // 执行 SQL 语句失败
+    if (err) {
+      return res.cc(err)
+    }
+    res.send({
+      status: 200,
+      message: '更新成功！',
+      data: results,
+    })
+  })
+}
+
+// 点赞新闻
+exports.likesNews = (req, res) => {
+  const userinfo = req.body
+  console.log(userinfo)
+  const sqlStr = `UPDATE news_info set ? WHERE id=` + userinfo.id
+  db.query(sqlStr, { likes: userinfo.likes }, (err, results) => {
+    // 执行 SQL 语句失败
+    if (err) {
+      return res.cc(err)
+    }
+    res.send({
+      status: 200,
+      message: '更新成功！',
+      data: results,
+    })
+  })
+}

@@ -29,8 +29,8 @@ const db = require('./db/index')
 const cors = require('cors')
 app.use(
   cors({
-    origin: 'https://api.wangjingqi.top/u',
-    // origin: 'https://localhost:8080',
+    // origin: 'https://wangjingqi.top',
+    origin: 'https://localhost:8080',
     credentials: true,
   })
 )
@@ -129,6 +129,10 @@ app.use(systemRouter)
 // 导入并使用资讯模块
 const newsRouter = require('./router/news')
 app.use(newsRouter)
+
+// 导入并使用论坛模块
+const forumRouter = require('./router/forum')
+app.use(forumRouter)
 
 // 导入并使用用户路由模块
 const userRouter = require('./router/user')

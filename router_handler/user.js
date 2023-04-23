@@ -285,8 +285,6 @@ exports.islogin = (req, res) => {
   const sql = 'select * from users_info where sessionID=?'
   // 执行SQL语句
   db.query(sql, req.sessionID, (err, results) => {
-    console.log(err, results)
-
     res.send({
       status: 200,
       data: [
@@ -297,7 +295,7 @@ exports.islogin = (req, res) => {
           isLogin: '1',
           loginNum: '15',
           loginTime: '2023/3/6 10:59:42',
-          nickName: null,
+          nickName: 111,
           password: null,
           phoneNumber: '18011312502',
           qqNumber: null,
@@ -330,14 +328,12 @@ exports.islogin = (req, res) => {
 //退出登录的处理函数
 exports.logout = (req, res) => {
   var myDate = new Date()
-  const sql = `UPDATE info set ? WHERE sessionID=` + req.sessionID
+  const sql = `UPDATE users_info set ? WHERE sessionID=` + req.sessionID
   // 执行SQL语句
   db.query(
     sql,
     {
       isLogin: '0',
-      // loginTime: myDate.toLocaleString(),
-      // dueTime: myDate.toLocaleString(),
     },
     (err, results) => {
       req.session.destroy()
@@ -346,4 +342,17 @@ exports.logout = (req, res) => {
       })
     }
   )
+}
+
+//修改昵称的处理函数
+exports.setUserInfo = (req, res) => {
+  const sql = `UPDATE users_info set ? WHERE id=` + req.body.id
+  // 执行SQL语句
+  db.query(sql, req.body, (err, results) => {
+    res.status(200).send({
+      status: 200,
+      data: results,
+      message: '修改成功',
+    })
+  })
 }

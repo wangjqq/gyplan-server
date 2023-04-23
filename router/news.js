@@ -8,5 +8,9 @@ const news_handler = require('../router_handler/news')
 router.get('/news/getAllNewsList', news_handler.getAllNewsList)
 // 根据id获取新闻详情
 router.get('/news/getNewContentById', news_handler.getNewContentById)
+// 查看新闻
+router.post('/news/viewNews', news_handler.viewNews)
+// 点赞新闻
+router.post('/news/likesNews', news_handler.likesNews)
 
 module.exports = router
