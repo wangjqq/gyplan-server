@@ -113,10 +113,7 @@ exports.login = (req, res) => {
     // TODO:判断密码是否正确
     // console.log(userinfo.password);
     // console.log(results[0].password);
-    const compareResult = bcrypt.compareSync(
-      userinfo.password,
-      results[0].password
-    )
+    const compareResult = bcrypt.compareSync(userinfo.password, results[0].password)
     // console.log(compareResult);
     if (!compareResult) {
       return res.cc('登陆失败,密码错误!')
@@ -191,8 +188,7 @@ exports.login1 = (req, res) => {
         let myDate = new Date()
         console.log(results)
         if (results.length === 1) {
-          const sql2 =
-            `UPDATE users_info set ? WHERE phoneNumber=` + userinfo.phoneNumber
+          const sql2 = `UPDATE users_info set ? WHERE phoneNumber=` + userinfo.phoneNumber
           db.query(
             sql2,
             {
@@ -291,11 +287,11 @@ exports.islogin = (req, res) => {
         {
           dueTime: '2023/3/6 10:59:42',
           email: null,
-          id: 51,
+          id: 52,
           isLogin: '1',
           loginNum: '15',
           loginTime: '2023/3/6 10:59:42',
-          nickName: 111,
+          nickName: '顾渊',
           password: null,
           phoneNumber: '18011312502',
           qqNumber: null,
