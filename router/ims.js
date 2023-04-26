@@ -15,6 +15,10 @@ router.get('/ims/getAllUseList', ims_handler.getAllUseList)
 
 // 添加元器件
 router.post('/ims/addItem', ims_handler.addItem)
+// 编辑元器件
+router.post('/ims/editItem', ims_handler.editItem)
+// 删除元器件
+router.post('/ims/delItem', ims_handler.delItem)
 // 添加元器件分类
 router.post('/ims/addItemType', ims_handler.addItemType)
 
