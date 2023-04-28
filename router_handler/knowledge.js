@@ -6,7 +6,7 @@ exports.getKnowledgeList = (req, res) => {
   // 获取客户端提交到服务器的用户信息
   // const userinfo = req.body
   // 定义查询语句
-  const sqlStr = 'select * from knowledge_info'
+  const sqlStr = 'select * from knowledge_info where user_id=' + req.query.userId
 
   db.query(sqlStr, (err, results) => {
     // 执行 SQL 语句失败
@@ -26,7 +26,7 @@ exports.getDataStructureList = (req, res) => {
   // 获取客户端提交到服务器的用户信息
   // const userinfo = req.body
   // 定义查询语句
-  const sqlStr = 'select * from datastructure_info'
+  const sqlStr = 'select * from datastructure_info where user_id=' + req.query.userId
 
   db.query(sqlStr, (err, results) => {
     // 执行 SQL 语句失败
@@ -64,28 +64,32 @@ exports.addDataStructureKeyType = (req, res) => {
   const userinfo = req.query
   // 定义新增语句
   const sqlStr = `insert into datastructure_key_type set ?`
-  console.log(req);
-  db.query(sqlStr, {
-    label: userinfo.name,
-    father_id: userinfo.father_id
-  }, (err, results) => {
-    // 执行 SQL 语句失败
-    if (err) {
-      return res.cc(err)
+  console.log(req)
+  db.query(
+    sqlStr,
+    {
+      label: userinfo.name,
+      father_id: userinfo.father_id,
+    },
+    (err, results) => {
+      // 执行 SQL 语句失败
+      if (err) {
+        return res.cc(err)
+      }
+      res.send({
+        status: 200,
+        message: '添加数据结构/算法知识点分类成功！',
+        data: results,
+      })
     }
-    res.send({
-      status: 200,
-      message: '添加数据结构/算法知识点分类成功！',
-      data: results,
-    })
-  })
+  )
 }
 
 // 新增数据结构/算法的题目/知识点
 exports.addDataStructure = (req, res) => {
   const userinfo = req.query
   // 定义新增语句
-  console.log(userinfo);
+  console.log(userinfo)
   if (userinfo.is_knowledge_point == 1) {
     userinfo.name = null
     userinfo.answer = null
@@ -94,57 +98,65 @@ exports.addDataStructure = (req, res) => {
     userinfo.my_answer = null
     userinfo.description = null
   }
-  if (userinfo.id != "") { //是修改数据
-    const sqlStr = `UPDATE datastructure_info set ? WHERE id =` + userinfo.id;
-    db.query(sqlStr, {
-      name: userinfo.name,
-      answer: userinfo.answer,
-      state: userinfo.state,
-      difficulty: userinfo.difficulty,
-      my_answer: userinfo.my_answer,
-      is_knowledge_point: userinfo.is_knowledge_point,
-      knowledgeType: userinfo.knowledgeType,
-      note: userinfo.note,
-      key_point_name: userinfo.key_point_name,
-      key_point_content: userinfo.key_point_content,
-      description: userinfo.description,
-    }, (err, results) => {
-      // 执行 SQL 语句失败
-      if (err) {
-        return res.cc(err)
+  if (userinfo.id != '') {
+    //是修改数据
+    const sqlStr = `UPDATE datastructure_info set ? WHERE id =` + userinfo.id
+    db.query(
+      sqlStr,
+      {
+        name: userinfo.name,
+        answer: userinfo.answer,
+        state: userinfo.state,
+        difficulty: userinfo.difficulty,
+        my_answer: userinfo.my_answer,
+        is_knowledge_point: userinfo.is_knowledge_point,
+        knowledgeType: userinfo.knowledgeType,
+        note: userinfo.note,
+        key_point_name: userinfo.key_point_name,
+        key_point_content: userinfo.key_point_content,
+        description: userinfo.description,
+      },
+      (err, results) => {
+        // 执行 SQL 语句失败
+        if (err) {
+          return res.cc(err)
+        }
+        res.send({
+          status: 200,
+          message: '添加数据结构/算法的题目/知识点成功！',
+          data: results,
+        })
       }
-      res.send({
-        status: 200,
-        message: '添加数据结构/算法的题目/知识点成功！',
-        data: results,
-      })
-    })
+    )
   } else {
     const sqlStr = `insert into datastructure_info set ?`
-    db.query(sqlStr, {
-      name: userinfo.name,
-      answer: userinfo.answer,
-      state: userinfo.state,
-      difficulty: userinfo.difficulty,
-      my_answer: userinfo.my_answer,
-      is_knowledge_point: userinfo.is_knowledge_point,
-      knowledgeType: userinfo.knowledgeType,
-      note: userinfo.note,
-      key_point_name: userinfo.key_point_name,
-      key_point_content: userinfo.key_point_content,
-      description: userinfo.description,
-    }, (err, results) => {
-      // 执行 SQL 语句失败
-      if (err) {
-        return res.cc(err)
+    db.query(
+      sqlStr,
+      {
+        name: userinfo.name,
+        answer: userinfo.answer,
+        state: userinfo.state,
+        difficulty: userinfo.difficulty,
+        my_answer: userinfo.my_answer,
+        is_knowledge_point: userinfo.is_knowledge_point,
+        knowledgeType: userinfo.knowledgeType,
+        note: userinfo.note,
+        key_point_name: userinfo.key_point_name,
+        key_point_content: userinfo.key_point_content,
+        description: userinfo.description,
+        user_id: userinfo.userId,
+      },
+      (err, results) => {
+        // 执行 SQL 语句失败
+        if (err) {
+          return res.cc(err)
+        }
+        res.send({
+          status: 200,
+          message: '添加数据结构/算法的题目/知识点成功！',
+          data: results,
+        })
       }
-      res.send({
-        status: 200,
-        message: '添加数据结构/算法的题目/知识点成功！',
-        data: results,
-      })
-    })
+    )
   }
-
-
 }

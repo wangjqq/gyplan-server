@@ -171,18 +171,21 @@ exports.login = (req, res) => {
 //登录的处理函数
 exports.login1 = (req, res) => {
   let userinfo = req.body
+  // console.log(req.sessionID)
   const sql = 'select * from users_login where sessionID=?'
   db.query(sql, req.sessionID, (err, results) => {
     if (err) {
       return res.cc(err)
     }
     let dbData = results[0]
+    console.log(dbData, userinfo)
     if (
       dbData &&
       dbData.phoneNumber === userinfo.phoneNumber &&
       dbData.smsCode === userinfo.phoneCode &&
       dbData.picCode === userinfo.captcha
     ) {
+      console.log(111111111111111111)
       const sql1 = 'select * from users_info where phoneNumber=?'
       db.query(sql1, userinfo.phoneNumber, (err, results) => {
         let myDate = new Date()
