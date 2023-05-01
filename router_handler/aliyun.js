@@ -23,6 +23,7 @@ exports.sendSms = (req, res) => {
     },
     (err, results) => {
       if (err) {
+        console.log(1111)
         return res.cc(err)
       }
       if (req.body.phoneNumber == '18011312502') {
