@@ -218,6 +218,7 @@ exports.login1 = (req, res) => {
               loginNum: '1',
               phoneNumber: userinfo.phoneNumber,
               userPic: imgUrl,
+              sessionID: req.sessionID,
             },
             (err, results) => {
               console.log(err)
