@@ -54,17 +54,17 @@ exports.sendSms = (req, res) => {
 
         client.request('SendSms', params, requestOption).then(
           (result) => {
-            res.send(JSON.stringify(result))
+            // res.send(JSON.stringify(result))
+            res.send({
+              status: 200,
+              message: `短信验证码发送成功！`,
+              data: results,
+            })
           },
           (ex) => {
             res.send(ex)
           }
         )
-        res.send({
-          status: 200,
-          message: `短信验证码发送成功！`,
-          data: results,
-        })
       }
     }
   )
