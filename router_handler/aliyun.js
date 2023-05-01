@@ -12,11 +12,12 @@ exports.sendSms = (req, res) => {
   // db.query(sql, req.sessionID, (err, results) => {
   var timestamp = Date.parse(new Date())
   // const sql2 = `UPDATE users_login set ? WHERE id=` + results[0].id
-  const sql2 = `UPDATE users_login set ?  where sessionID = ${req.sessionID}`
+  const sql2 = `UPDATE users_login set ?  `
+  console.log(sql2)
   db.query(
     sql2,
     {
-      sessionID: req.sessionID,
+      // sessionID: req.sessionID,
       smsCode: code,
       phoneNumber: req.body.phoneNumber,
       smsValidTime: timestamp,
