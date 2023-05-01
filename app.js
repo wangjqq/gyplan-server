@@ -150,6 +150,7 @@ app.use((err, req, res, next) => {
 })
 const { init } = require('./util/init')
 init() //初始化
+require('./util/ws')
 // const aliyun_handler = require('./router_handler/aliyun')
 // console.log(aliyun_handler.sendSms())
 // 启动服务器

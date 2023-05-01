@@ -232,6 +232,10 @@ exports.login1 = (req, res) => {
         return
       })
     } else {
+      res.send({
+        status: 500,
+        message: '登录失败，请检查输入，尝试重新获取验证码！',
+      })
     }
   })
 }

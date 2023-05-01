@@ -85,11 +85,10 @@ exports.addDataStructureKeyType = (req, res) => {
   )
 }
 
-// 新增数据结构/算法的题目/知识点
+// 新增/修改数据结构/算法的题目/知识点
 exports.addDataStructure = (req, res) => {
   const userinfo = req.query
   // 定义新增语句
-  console.log(userinfo)
   if (userinfo.is_knowledge_point == 1) {
     userinfo.name = null
     userinfo.answer = null
