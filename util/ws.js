@@ -1,17 +1,11 @@
 // 导入数据库操作模块
 const db = require('../db/index')
-
 const WebSocket = require('ws').Server
-
 wss = new WebSocket({ host: 'localhost', port: 8089 })
-
 wss.on('connection', function (ws) {
   //连接成功
   const sqlStr = 'select * from order_info'
   db.query(sqlStr, (err, results) => {
-    // 执行 SQL 语句失败
-
-    console.log(results)
     ws.send(JSON.stringify(results), (err) => {
       if (err) {
         console.log(`[SERVER] error: ${err}`)
@@ -31,13 +25,8 @@ wss.on('connection', function (ws) {
         pic: resData.pic,
       },
       (err1, results1) => {
-        console.log(results1)
-        console.log('接收到来自clent的消息：' + resData.phoneNumber)
         const sqlStr = 'select * from order_info'
         db.query(sqlStr, (err, results) => {
-          // 执行 SQL 语句失败
-
-          console.log(results)
           ws.send(JSON.stringify(results), (err) => {
             if (err) {
               console.log(`[SERVER] error: ${err}`)
@@ -48,4 +37,3 @@ wss.on('connection', function (ws) {
     )
   })
 })
-// console.log(11111)

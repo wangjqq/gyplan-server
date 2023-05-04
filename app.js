@@ -29,7 +29,7 @@ const db = require('./db/index')
 const cors = require('cors')
 app.use(
   cors({
-    origin: 'https://wangjingqi.top',
+    origin: 'https://www.wangjingqi.top',
     // origin: 'https://localhost:8080',
     credentials: true,
   })
